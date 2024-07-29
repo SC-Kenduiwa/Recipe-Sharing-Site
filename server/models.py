@@ -1,7 +1,8 @@
 from config import db, bcrypt
 from datetime import datetime
+from sqlalchemy_serializer import SerializerMixin
 
-class User(db.Model):
+class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -12,7 +13,12 @@ class User(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-class Recipe(db.Model):
+    recipes = db.relationship('Recipe', back_populate='user', lazy=True)
+    comments = db.relationship('Comment', back_populate='user', lazy=True)
+    rating = db.relationship('Rating', back_populate='user', lazy=True)
+    bookmark = db.relationship('Bookmark', back_populate='user', lazy=True)
+
+class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +34,24 @@ class Recipe(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-class Comment(db.Model):
+    user = db.relationship('User', back_populates='recipes')
+    comments = db.relationship('Comment', back_populate='recipe', lazy=True)
+    rating = db.relationship('Rating', back_populate='recipe', lazy=True)
+    bookmark = db.relationship('Bookmark', back_populate='recipe', lazy=True)
+
+    @property
+    def password_hash(self):
+        raise AttributeError('password_hash is not a readable attribute')
+    
+    @password_hash.setter
+    def password_hash(self, password):
+        self._password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+
+    def authenticate(self, password):
+        return bcrypt.check_password_hash(self._password_hash, password.encode('utf-8'))
+    
+    
+class Comment(db.Model, SerializerMixin):
     __tablename__ = 'comments'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -38,7 +61,12 @@ class Comment(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-class Rating(db.Model):
+    user = db.relationship('User', back_populates='comments')
+    recipe = db.relationship('Recipe', back_populates='comments')
+    rating = db.relationship('Rating', back_populates='comments')
+    bookmark = db.relationship('Bookmark', back_populates='comments')
+
+class Rating(db.Model, SerializerMixin):
     __tablename__ = 'ratings'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -47,10 +75,20 @@ class Rating(db.Model):
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-class Bookmark(db.Model):
+    user = db.relationship('User', back_populates= 'rating')
+    recipe = db.relationship('Recipe', back_populates= 'rating')
+    comment = db.relationship('Comment', back_populates= 'rating')
+    bookmark = db.relationship('Bookmark', back_populates= 'rating')
+
+class Bookmark(db.Model, SerializerMixin):
     __tablename__ = 'bookmarks'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipes.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    user = db.relationship('User', back_populates= 'bookmark')
+    recipe = db.relationship('Recipe', back_populates= 'bookmark')
+    comment = db.relationship('Comment', back_populates= 'bookmark')
+    rating = db.relationship('Rating', back_populates= 'bookmark')
