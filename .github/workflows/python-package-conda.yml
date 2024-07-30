@@ -20,7 +20,7 @@ jobs:
     - name: Set up Conda
       uses: conda-incubator/setup-miniconda@v2
       with:
-        python-version: '3.10'
+        python-version: '3.8'
         auto-update-conda: true
 
     - name: Initialize Conda
@@ -41,7 +41,6 @@ jobs:
       run: |
         source $(conda info --base)/etc/profile.d/conda.sh
         conda activate recipe-env
-        conda install -c conda-forge flake8
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       shell: bash
@@ -50,6 +49,5 @@ jobs:
       run: |
         source $(conda info --base)/etc/profile.d/conda.sh
         conda activate recipe-env
-        conda install -c conda-forge pytest
         pytest
       shell: bash
