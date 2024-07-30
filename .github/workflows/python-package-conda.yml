@@ -34,7 +34,7 @@ jobs:
       run: |
         source $CONDA_BASE/etc/profile.d/conda.sh
         conda activate $CONDA_ENV_NAME
-        pip install flake8 sqlalchemy-serializer cloudinary
+        pip install flake8 pytest
       shell: bash
 
     - name: Lint with flake8
