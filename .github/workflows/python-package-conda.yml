@@ -49,6 +49,6 @@ jobs:
       run: |
         source $CONDA_BASE/etc/profile.d/conda.sh
         conda activate $CONDA_ENV_NAME
-        echo "PYTHONPATH=$(pwd)/server" >> $GITHUB_ENV
+        export PYTHONPATH=$(pwd)/server
         pytest server/test_app.py
       shell: bash
