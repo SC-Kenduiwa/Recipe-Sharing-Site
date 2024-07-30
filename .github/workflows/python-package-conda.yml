@@ -25,27 +25,32 @@ jobs:
         auto-update-conda: true
 
     - name: Initialize Conda
-      shell: bash
       run: |
-        source ~/.bashrc
+        source $HOME/.bashrc
         conda init bash
-        conda activate base
+        conda info
+        conda config --set always_yes yes --set changeps1 no
+        conda update -q conda
+        conda info -a
 
     - name: Install dependencies
-      shell: bash
       run: |
-        conda env update --file environment.yml --name base || conda env create --file environment.yml --name base
+        conda env create --file environment.yml --name base || conda env update --file environment.yml --name base
         conda activate base
+        conda info -a
+      shell: bash
 
     - name: Lint with flake8
-      shell: bash
       run: |
-        conda install -y flake8
+        conda activate base
+        conda install -c conda-forge flake8
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      shell: bash
 
     - name: Test with pytest
-      shell: bash
       run: |
-        conda install -y pytest
+        conda activate base
+        conda install -c conda-forge pytest
         pytest
+      shell: bash
