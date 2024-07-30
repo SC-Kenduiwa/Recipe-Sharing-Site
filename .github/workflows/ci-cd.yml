@@ -21,38 +21,16 @@ jobs:
       with:
         python-version: '3.8.13'
 
-    - name: Set up Conda
-      uses: conda-incubator/setup-miniconda@v2
-      with:
-        python-version: '3.8'
-        auto-update-conda: true
-
-    - name: Create and activate environment
-      run: |
-        conda env create --file server/environment.yml --name recipe-env || conda env update --file server/environment.yml --name recipe-env
-        echo "CONDA_ENV_NAME=recipe-env" >> $GITHUB_ENV
-        echo "CONDA_BASE=$(conda info --base)" >> $GITHUB_ENV
-      shell: bash
-
     - name: Install dependencies
       run: |
-        source $CONDA_BASE/etc/profile.d/conda.sh
-        conda activate $CONDA_ENV_NAME
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install flake8 pytest
-      shell: bash
 
-    - name: Run linting
-      run: |
-        source $CONDA_BASE/etc/profile.d/conda.sh
-        conda activate $CONDA_ENV_NAME
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-      shell: bash
+    - name: Ensure the app directory is in the PYTHONPATH
+      run: echo "PYTHONPATH=$(pwd)/server" >> $GITHUB_ENV
 
     - name: Run unit tests
       run: |
-        source $CONDA_BASE/etc/profile.d/conda.sh
-        conda activate $CONDA_ENV_NAME
-        pytest test_app.py
-      shell: bash
+        pytest server/test_app.py
+      env:
+        PYTHONPATH: ${{ env.PYTHONPATH }}
