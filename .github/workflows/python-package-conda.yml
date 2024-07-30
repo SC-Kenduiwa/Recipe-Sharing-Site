@@ -37,6 +37,13 @@ jobs:
         echo "conda activate recipe-env" >> $GITHUB_ENV
       shell: bash
 
+    - name: Install additional packages
+      run: |
+        source $(conda info --base)/etc/profile.d/conda.sh
+        conda activate recipe-env
+        pip install sqlalchemy-serializer cloudinary
+      shell: bash
+
     - name: Lint with flake8
       run: |
         source $(conda info --base)/etc/profile.d/conda.sh
