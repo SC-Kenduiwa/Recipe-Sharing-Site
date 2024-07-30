@@ -30,4 +30,9 @@ jobs:
       run: |
         # Ensure the app directory is in the PYTHONPATH
         echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
+        source $CONDA_BASE/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV_NAME
         pytest test_app.py
+      env:
+        CONDA_BASE: /usr/share/miniconda
+        CONDA_ENV_NAME: recipe-env
