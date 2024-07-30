@@ -19,7 +19,7 @@ def init_database():
         username='testuser1',
         email='testuser1@example.com',
         password_hash='password_hash1',
-        profile_image_url='default.png',  # Provide default value
+        profile_image_url='default.png', 
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
