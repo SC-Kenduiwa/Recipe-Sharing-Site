@@ -24,9 +24,21 @@ def init_database():
     # Create the database and the database table(s)
     db.create_all()
 
-    # Insert user data
-    user1 = User(username='testuser1', email='testuser1@example.com', created_at=datetime.utcnow(), updated_at=datetime.utcnow())
-    user2 = User(username='testuser2', email='testuser2@example.com', created_at=datetime.utcnow(), updated_at=datetime.utcnow())
+    # Insert user data with non-null required fields
+    user1 = User(
+        username='testuser1',
+        email='testuser1@example.com',
+        password_hash='password_hash1',
+        created_at=datetime.utcnow(),
+        updated_at=datetime.utcnow()
+    )
+    user2 = User(
+        username='testuser2',
+        email='testuser2@example.com',
+        password_hash='password_hash2',
+        created_at=datetime.utcnow(),
+        updated_at=datetime.utcnow()
+    )
     db.session.add(user1)
     db.session.add(user2)
 
@@ -43,7 +55,11 @@ def test_create_user(test_client, init_database):
     WHEN the '/users' endpoint is posted to (POST request)
     THEN check if the response is valid
     """
-    response = test_client.post('/users', json={'username': 'newuser', 'email': 'newuser@example.com'})
+    response = test_client.post('/users', json={
+        'username': 'newuser',
+        'email': 'newuser@example.com',
+        'password_hash': 'newpasswordhash'
+    })
     assert response.status_code == 201
     assert b'newuser' in response.data
 
@@ -64,7 +80,11 @@ class TestUserRoutes(unittest.TestCase):
         self.app.testing = True
 
     def test_create_user(self):
-        response = self.app.post('/users', json={'username': 'unittestuser', 'email': 'unittestuser@example.com'})
+        response = self.app.post('/users', json={
+            'username': 'unittestuser',
+            'email': 'unittestuser@example.com',
+            'password_hash': 'unittestpasswordhash'
+        })
         self.assertEqual(response.status_code, 201)
         self.assertIn(b'unittestuser', response.data)
 
