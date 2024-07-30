@@ -23,38 +23,31 @@ jobs:
         python-version: '3.8'
         auto-update-conda: true
 
-    - name: Initialize Conda
-      run: |
-        conda config --set always_yes yes --set changeps1 no
-        conda init bash
-        conda update -q conda
-        conda info -a
-      shell: bash
-
     - name: Create and activate environment
       run: |
         conda env create --file server/environment.yml --name recipe-env || conda env update --file server/environment.yml --name recipe-env
-        echo "conda activate recipe-env" >> $GITHUB_ENV
+        echo "CONDA_ENV_NAME=recipe-env" >> $GITHUB_ENV
+        echo "CONDA_BASE=$(conda info --base)" >> $GITHUB_ENV
       shell: bash
 
     - name: Install additional packages
       run: |
-        source $(conda info --base)/etc/profile.d/conda.sh
-        conda activate recipe-env
+        source $CONDA_BASE/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV_NAME
         pip install sqlalchemy-serializer cloudinary
       shell: bash
 
     - name: Lint with flake8
       run: |
-        source $(conda info --base)/etc/profile.d/conda.sh
-        conda activate recipe-env
+        source $CONDA_BASE/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV_NAME
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       shell: bash
 
     - name: Test with pytest
       run: |
-        source $(conda info --base)/etc/profile.d/conda.sh
-        conda activate recipe-env
+        source $CONDA_BASE/etc/profile.d/conda.sh
+        conda activate $CONDA_ENV_NAME
         pytest
       shell: bash
