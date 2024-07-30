@@ -7,6 +7,7 @@ sqlalchemy-serializer
 flask-restful
 flask-cors
 faker
+pytest
 bcrypt
 flask-bcrypt
 flask-jwt-extended
