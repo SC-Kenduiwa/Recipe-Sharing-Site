@@ -28,4 +28,6 @@ jobs:
 
     - name: Run unit tests
       run: |
+        # Ensure the app directory is in the PYTHONPATH
+        echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
         pytest test_app.py
