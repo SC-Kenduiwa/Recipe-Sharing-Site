@@ -3,6 +3,7 @@ from flask import request, jsonify
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from models import User, Recipe, Comment, Rating, Bookmark
+from sqlalchemy import or_
 
 class Signup(Resource):
     def post(self):
@@ -73,15 +74,63 @@ class RefreshToken(Resource):
 class RecipeResource(Resource):
     def get(self, recipe_id=None):
         if recipe_id is None:
-            # Get all recipes
-            recipes = Recipe.query.all()
-            recipe_list = []
+            # Handling query parameters for search, filter, and pagination
+            search_query = request.args.get('search')
+            country = request.args.get('country')
+            rating = request.args.get('rating', type=float)
+            ingredients = request.args.get('ingredients')
+            servings = request.args.get('servings', type=int)
+            createdDateTime = request.args.get('createdDateTime')
+            page = request.args.get('page', default=1, type=int)
+            per_page = request.args.get('per_page', default=10, type=int)
             
-            for recipe in recipes:
-                recipe_data = self.format_recipe(recipe)
-                recipe_list.append(recipe_data)
+            # Base query
+            query = Recipe.query
             
-            return jsonify({"recipes": recipe_list})
+            # Search functionality
+            if search_query:
+                query = query.filter(
+                    or_(
+                        Recipe.title.ilike(f'%{search_query}%'),
+                        Recipe.ingredients.ilike(f'%{search_query}%'),
+                        Recipe.servings.ilike(f'%{search_query}%')
+                    )
+                )
+            
+            # Filter by country
+            if country:
+                query = query.filter_by(country=country)
+            
+            # Filter by rating
+            if rating is not None:
+                query = query.having(
+                    db.func.round(db.func.avg(Rating.value), 2) >= rating
+                )
+            
+            # Filter by ingredients (substring match)
+            if ingredients:
+                query = query.filter(Recipe.ingredients.ilike(f'%{ingredients}%'))
+            
+            # Filter by servings
+            if servings:
+                query = query.filter_by(servings=servings)
+            
+            # Filter by creation date
+            if createdDateTime:
+                query = query.filter(db.func.date(Recipe.created_at) == createdDateTime)
+            
+            # Pagination
+            recipes = query.paginate(page=page, per_page=per_page, error_out=False)
+            total_pages = recipes.pages
+            recipe_list = [self.format_recipe(recipe) for recipe in recipes.items]
+            
+            return jsonify({
+                "recipes": recipe_list,
+                "page": page,
+                "total_pages": total_pages,
+                "total_recipes": recipes.total
+            })
+        
         else:
             # Get a single recipe by ID
             recipe = Recipe.query.get_or_404(recipe_id)
@@ -150,6 +199,10 @@ class RecipeResource(Resource):
         return {"message": "Recipe deleted successfully"}, 200
 
     def format_recipe(self, recipe, include_details=False):
+        # Calculate the average rating
+        ratings = Rating.query.filter_by(recipe_id=recipe.id).all()
+        average_rating = round(sum(rating.value for rating in ratings) / len(ratings), 2) if ratings else None
+
         data = {
             'id': recipe.id,
             'title': recipe.title,
@@ -162,7 +215,8 @@ class RecipeResource(Resource):
             'country': recipe.country,
             'user_id': recipe.user_id,
             'created_at': recipe.created_at.isoformat() if recipe.created_at else None,
-            'updated_at': recipe.updated_at.isoformat() if recipe.updated_at else None
+            'updated_at': recipe.updated_at.isoformat() if recipe.updated_at else None,
+            'average_rating': average_rating  # Include the average rating in the response
         }
         
         if include_details:
@@ -179,6 +233,7 @@ class RecipeResource(Resource):
             'created_at': comment.created_at.isoformat() if comment.created_at else None,
             'updated_at': comment.updated_at.isoformat() if comment.updated_at else None
         }
+
 
 class UserProfile(Resource):
     @jwt_required()
@@ -255,7 +310,7 @@ class CommentResource(Resource):
         db.session.add(new_comment)
         db.session.commit()
         
-        return jsonify({"comment": self.format_comment(new_comment)}), 201
+        return {"comment": self.format_comment(new_comment)}, 201
 
 
     # Update a specific comment for a specific recipe
@@ -297,7 +352,6 @@ class CommentResource(Resource):
             'updated_at': comment.updated_at.isoformat() if comment.updated_at else None
         }
 
-
 class RatingResource(Resource):
     def get(self, recipe_id=None, rating_id=None):
         if recipe_id is not None and rating_id is None:
@@ -332,14 +386,14 @@ class RatingResource(Resource):
             return {"error": "User has already rated this recipe"}, 400
 
         new_rating = Rating(
-            rating=rating_value, 
+            value=rating_value, 
             user_id=current_user_id, 
             recipe_id=recipe_id
         )
         db.session.add(new_rating)
         db.session.commit()
         
-        return jsonify({"rating": self.format_rating(new_rating)}), 201
+        return {"rating": self.format_rating(new_rating)}, 201
     
     # Delete a specific rating for a specific recipe
     @jwt_required()
@@ -361,8 +415,7 @@ class RatingResource(Resource):
             'value': rating.value,
             'user_id': rating.user_id,
             'recipe_id': rating.recipe_id,
-            'created_at': rating.created_at.isoformat() if rating.created_at else None,
-            'updated_at': rating.updated_at.isoformat() if rating.updated_at else None
+            'created_at': rating.created_at.isoformat() if rating.created_at else None
         }
 
 
@@ -389,7 +442,7 @@ class BookmarkResource(Resource):
         db.session.add(new_bookmark)
         db.session.commit()
         
-        return jsonify({"bookmark": self.format_bookmark(new_bookmark)}), 201
+        return {"bookmark": self.format_bookmark(new_bookmark)}, 201
     
     @jwt_required()
     def delete(self, recipe_id, bookmark_id):
@@ -409,15 +462,14 @@ class BookmarkResource(Resource):
             'id': bookmark.id,
             'user_id': bookmark.user_id,
             'recipe_id': bookmark.recipe_id,
-            'created_at': bookmark.created_at.isoformat() if bookmark.created_at else None,
-            'updated_at': bookmark.updated_at.isoformat() if bookmark.updated_at else None
+            'created_at': bookmark.created_at.isoformat() if bookmark.created_at else None
         }
 
 
 
 # Add these resources to your API
 api.add_resource(UserProfile, '/profile')
-api.add_resource(Signup, '/signup')
+api.add_resource(Signup, '/users')
 api.add_resource(Login, '/login')
 api.add_resource(RefreshToken, '/refresh')
 api.add_resource(RecipeResource, '/recipes', '/recipes/<int:recipe_id>')
