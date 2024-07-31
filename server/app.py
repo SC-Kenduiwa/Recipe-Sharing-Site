@@ -220,12 +220,92 @@ class UserProfile(Resource):
             'country': recipe.country,
         }
 
+
+
+class CommentResource(Resource):
+    def get(self, recipe_id=None, comment_id=None):
+        if recipe_id is not None and comment_id is None:
+            # Get all comments for a specific recipe
+            comments = Comment.query.filter_by(recipe_id=recipe_id).all()
+            return jsonify({"comments": [self.format_comment(comment) for comment in comments]})
+        
+        elif recipe_id is not None and comment_id is not None:
+            # Get a specific comment for a specific recipe
+            comment = Comment.query.filter_by(id=comment_id, recipe_id=recipe_id).first_or_404()
+            return jsonify({"comment": self.format_comment(comment)})
+        
+        else:
+            return {"error": "Invalid request parameters"}, 400
+
+
+    # Create a new comment for a specific recipe
+    @jwt_required()
+    def post(self, recipe_id):
+        data = request.get_json()
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+
+        new_comment = Comment(
+            content=data['content'], 
+            user_id=current_user_id, 
+            recipe_id=recipe_id
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        
+        return jsonify({"comment": self.format_comment(new_comment)}), 201
+
+
+    # Update a specific comment for a specific recipe
+    @jwt_required()
+    def put(self, recipe_id, comment_id):
+        data = request.get_json()
+        current_user_id = get_jwt_identity()
+        comment = Comment.query.filter_by(id=comment_id, recipe_id=recipe_id).first_or_404()
+        
+        if comment.user_id != current_user_id:
+            return {"error": "Permission denied"}, 403
+        
+        comment.content = data.get('content', comment.content)
+        db.session.commit()
+        
+        return jsonify({"comment": self.format_comment(comment)})
+
+    # Delete a specific comment for a specific recipe
+    @jwt_required()
+    def delete(self, recipe_id, comment_id):
+        current_user_id = get_jwt_identity()
+        comment = Comment.query.filter_by(id=comment_id, recipe_id=recipe_id).first_or_404()
+        
+        if comment.user_id != current_user_id:
+            return {"error": "Permission denied"}, 403
+        
+        db.session.delete(comment)
+        db.session.commit()
+        
+        return {"message": "Comment deleted successfully"}, 200
+
+    def format_comment(self, comment):
+        return {
+            'id': comment.id,
+            'content': comment.content,
+            'user_id': comment.user_id,
+            'recipe_id': comment.recipe_id,
+            'created_at': comment.created_at.isoformat() if comment.created_at else None,
+            'updated_at': comment.updated_at.isoformat() if comment.updated_at else None
+        }
+
+
 # Add these resources to your API
 api.add_resource(UserProfile, '/profile')
 api.add_resource(Signup, '/signup')
 api.add_resource(Login, '/login')
 api.add_resource(RefreshToken, '/refresh')
 api.add_resource(RecipeResource, '/recipes', '/recipes/<int:recipe_id>')
+api.add_resource(CommentResource, '/recipes/<int:recipe_id>/comments', '/recipes/<int:recipe_id>/comments/<int:comment_id>')
+
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)
