@@ -2,7 +2,7 @@ from config import app, db, api
 from flask import request, jsonify
 from flask_restful import Resource
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
-from models import User, Recipe, Comment, Bookmark
+from models import User, Recipe, Comment, Rating, Bookmark
 
 class Signup(Resource):
     def post(self):
@@ -298,6 +298,123 @@ class CommentResource(Resource):
         }
 
 
+class RatingResource(Resource):
+    def get(self, recipe_id=None, rating_id=None):
+        if recipe_id is not None and rating_id is None:
+            # Get all ratings for a specific recipe
+            ratings = Rating.query.filter_by(recipe_id=recipe_id).all()
+            return jsonify({"ratings": [self.format_rating(rating) for rating in ratings]})
+        
+        elif recipe_id is not None and rating_id is not None:
+            # Get a specific rating for a specific recipe
+            rating = Rating.query.filter_by(id=rating_id, recipe_id=recipe_id).first_or_404()
+            return jsonify({"rating": self.format_rating(rating)})
+        
+        else:
+            return {"error": "Invalid request parameters"}, 400
+
+    # Create a new rating for a specific recipe
+    @jwt_required()
+    def post(self, recipe_id):
+        data = request.get_json()
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+
+        rating_value = data.get('value')
+        if rating_value is None or not (1 <= rating_value <= 5):
+            return {"error": "Rating must be between 1 and 5"}, 400
+        
+        # Handling multiple ratings from the same user
+        existing_rating = Rating.query.filter_by(user_id=current_user_id, recipe_id=recipe_id).first()
+        if existing_rating:
+            return {"error": "User has already rated this recipe"}, 400
+
+        new_rating = Rating(
+            rating=rating_value, 
+            user_id=current_user_id, 
+            recipe_id=recipe_id
+        )
+        db.session.add(new_rating)
+        db.session.commit()
+        
+        return jsonify({"rating": self.format_rating(new_rating)}), 201
+    
+    # Delete a specific rating for a specific recipe
+    @jwt_required()
+    def delete(self, recipe_id, rating_id):
+        current_user_id = get_jwt_identity()
+        rating = Rating.query.filter_by(id=rating_id, recipe_id=recipe_id).first_or_404()
+        
+        if rating.user_id != current_user_id:
+            return {"error": "Permission denied"}, 403
+        
+        db.session.delete(rating)
+        db.session.commit()
+        
+        return {"message": "Rating deleted successfully"}, 200
+
+    def format_rating(self, rating):
+        return {
+            'id': rating.id,
+            'value': rating.value,
+            'user_id': rating.user_id,
+            'recipe_id': rating.recipe_id,
+            'created_at': rating.created_at.isoformat() if rating.created_at else None,
+            'updated_at': rating.updated_at.isoformat() if rating.updated_at else None
+        }
+
+
+class BookmarkResource(Resource):
+    # Create a new bookmark for a specific recipe
+    @jwt_required()
+    def post(self, recipe_id):
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        recipe = Recipe.query.get(recipe_id)
+        
+        if not user or not recipe:
+            return {"error": "User or Recipe not found"}, 404
+        
+        # Check if bookmark already exists
+        existing_bookmark = Bookmark.query.filter_by(user_id=current_user_id, recipe_id=recipe_id).first()
+        if existing_bookmark:
+            return {"error": "Bookmark already exists"}, 400
+        
+        new_bookmark = Bookmark(
+            user_id=current_user_id, 
+            recipe_id=recipe_id
+        )
+        db.session.add(new_bookmark)
+        db.session.commit()
+        
+        return jsonify({"bookmark": self.format_bookmark(new_bookmark)}), 201
+    
+    @jwt_required()
+    def delete(self, recipe_id, bookmark_id):
+        current_user_id = get_jwt_identity()
+        bookmark = Bookmark.query.filter_by(id=bookmark_id, recipe_id=recipe_id).first_or_404()
+        
+        if bookmark.user_id != current_user_id:
+            return {"error": "Permission denied"}, 403
+        
+        db.session.delete(bookmark)
+        db.session.commit()
+        
+        return {"message": "Bookmark deleted successfully"}, 200
+
+    def format_bookmark(self, bookmark):
+        return {
+            'id': bookmark.id,
+            'user_id': bookmark.user_id,
+            'recipe_id': bookmark.recipe_id,
+            'created_at': bookmark.created_at.isoformat() if bookmark.created_at else None,
+            'updated_at': bookmark.updated_at.isoformat() if bookmark.updated_at else None
+        }
+
+
+
 # Add these resources to your API
 api.add_resource(UserProfile, '/profile')
 api.add_resource(Signup, '/signup')
@@ -305,6 +422,9 @@ api.add_resource(Login, '/login')
 api.add_resource(RefreshToken, '/refresh')
 api.add_resource(RecipeResource, '/recipes', '/recipes/<int:recipe_id>')
 api.add_resource(CommentResource, '/recipes/<int:recipe_id>/comments', '/recipes/<int:recipe_id>/comments/<int:comment_id>')
+api.add_resource(RatingResource, '/recipes/<int:recipe_id>/ratings', '/recipes/<int:recipe_id>/ratings/<int:rating_id>')
+api.add_resource(BookmarkResource, '/recipes/<int:recipe_id>/bookmarks', '/recipes/<int:recipe_id>/bookmarks/<int:bookmark_id>')
+
 
 
 if __name__ == '__main__':
