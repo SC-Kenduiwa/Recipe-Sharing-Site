@@ -34,6 +34,7 @@ class Recipe(db.Model):
     __tablename__ = 'recipes'
 
     id = db.Column(db.Integer, primary_key=True)
+    recipe_image_url = db.Column(db.String(255), nullable=False)
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     ingredients = db.Column(db.JSON, nullable=False)

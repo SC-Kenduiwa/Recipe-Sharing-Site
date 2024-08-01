@@ -38,6 +38,7 @@ def seed_data():
         recipes = []
         for _ in range(50):
             recipe = Recipe(
+                recipe_image_url=generate_image_url(),
                 title=fake.sentence(nb_words=4),
                 description=fake.paragraph(),
                 ingredients=fake.words(nb=10),

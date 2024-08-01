@@ -147,6 +147,7 @@ class RecipeResource(Resource):
             return {"error": "User not found"}, 404
         
         new_recipe = Recipe(
+            recipe_image_url = data.get('recipe_image_url'),
             title=data.get('title'),
             description=data.get('description'),
             ingredients=data.get('ingredients'),
@@ -172,6 +173,7 @@ class RecipeResource(Resource):
         if recipe.user_id != current_user_id:
             return {"error": "Permission denied"}, 403
         
+        recipe.recipe_image_url = data.get('recipe_image_url', recipe.recipe_image_url)
         recipe.title = data.get('title', recipe.title)
         recipe.description = data.get('description', recipe.description)
         recipe.ingredients = data.get('ingredients', recipe.ingredients)
@@ -205,6 +207,7 @@ class RecipeResource(Resource):
 
         data = {
             'id': recipe.id,
+            "recipe_image_url": recipe.recipe_image_url,
             'title': recipe.title,
             'description': recipe.description,
             'ingredients': recipe.ingredients,
