@@ -7,7 +7,25 @@ from models import User, Recipe, Comment, Rating, Bookmark
 
 fake = Faker()
 
-SAMPLE_IMAGE_IDS = ["http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4", "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4", "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4", "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4"]
+SAMPLE_IMAGE_IDS = [
+    "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4",
+    "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4",
+    "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4",
+    "http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4"
+]
+
+RECIPE_NAMES_AND_INGREDIENTS = [
+    ("Spaghetti Carbonara", ["Spaghetti", "Eggs", "Parmesan Cheese", "Pancetta", "Black Pepper", "Salt"]),
+    ("Chicken Tikka Masala", ["Chicken", "Yogurt", "Tomato Sauce", "Ginger", "Garlic", "Garam Masala", "Turmeric", "Cumin", "Chili Powder"]),
+    ("Classic Cheeseburger", ["Ground Beef", "Cheddar Cheese", "Lettuce", "Tomato", "Onions", "Pickles", "Ketchup", "Mustard", "Burger Buns"]),
+    ("Margarita Pizza", ["Pizza Dough", "Tomato Sauce", "Mozzarella Cheese", "Basil", "Olive Oil", "Salt"]),
+    ("Chocolate Chip Cookies", ["Flour", "Sugar", "Brown Sugar", "Butter", "Eggs", "Vanilla Extract", "Baking Soda", "Chocolate Chips"]),
+    ("Caesar Salad", ["Romaine Lettuce", "Caesar Dressing", "Parmesan Cheese", "Croutons", "Chicken Breast", "Lemon", "Olive Oil", "Garlic"]),
+    ("Beef Tacos", ["Ground Beef", "Taco Shells", "Cheddar Cheese", "Lettuce", "Tomato", "Onions", "Sour Cream", "Taco Seasoning"]),
+    ("Pad Thai", ["Rice Noodles", "Shrimp", "Tofu", "Eggs", "Peanuts", "Bean Sprouts", "Lime", "Tamarind Paste", "Fish Sauce", "Chili Flakes"]),
+    ("Chicken Alfredo", ["Fettuccine", "Chicken Breast", "Parmesan Cheese", "Heavy Cream", "Butter", "Garlic", "Salt", "Pepper"]),
+    ("Vegetable Stir Fry", ["Broccoli", "Bell Peppers", "Carrots", "Snap Peas", "Soy Sauce", "Garlic", "Ginger", "Sesame Oil", "Rice"]),
+]
 
 def generate_image_url():
     sample_id = random.choice(SAMPLE_IMAGE_IDS)
@@ -37,12 +55,13 @@ def seed_data():
         print("Seeding recipes...")
         recipes = []
         for _ in range(50):
+            name, ingredients = fake.random_element(RECIPE_NAMES_AND_INGREDIENTS)
             recipe = Recipe(
                 recipe_image_url=generate_image_url(),
-                title=fake.sentence(nb_words=4),
+                title=name,
                 description=fake.paragraph(),
-                ingredients=fake.words(nb=10),
-                procedure="\n".join([f"Step {i+1}. {fake.sentence()}" for i in range(5)]),
+                ingredients=', '.join(ingredients),
+                procedure="\n".join([f"Step {i+1}: {fake.sentence()}" for i in range(5)]),
                 servings=random.randint(2, 8),
                 cooking_time=random.randint(15, 120),
                 difficulty_level=random.choice(["Easy", "Medium", "Hard"]),
