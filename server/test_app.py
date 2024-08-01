@@ -38,30 +38,158 @@ def test_create_user(test_client, init_database):
     assert response.status_code == 201
     assert b'newuser' in response.data
 
-def test_get_users(test_client, init_database):
-    response = test_client.get('/users')
+def test_login(test_client, init_database):
+    response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    assert response.status_code == 200
+    assert 'access_token' in response.json
+    assert 'refresh_token' in response.json
+
+def test_refresh_token(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    refresh_token = login_response.json['refresh_token']
+    response = test_client.post('/refresh', json={
+        'refresh_token': refresh_token
+    })
+    assert response.status_code == 200
+    assert 'access_token' in response.json
+
+def test_view_profile(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    access_token = login_response.json['access_token']
+    response = test_client.get('/profile', headers={
+        'Authorization': f'Bearer {access_token}'
+    })
     assert response.status_code == 200
     assert b'testuser1' in response.data
 
-class TestUserRoutes(unittest.TestCase):
-    def setUp(self):
-        self.app = app.test_client()
-        self.app.testing = True
+def test_update_profile(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    access_token = login_response.json['access_token']
+    response = test_client.put('/profile', json={
+        'username': 'updateduser1',
+        'profile_image_url': 'updated.png'
+    }, headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 200
+    assert b'updateduser1' in response.data
 
-    def test_create_user(self):
-        response = self.app.post('/users', json={
-            'username': 'unittestuser',
-            'email': 'unittestuser@example.com',
-            'password_hash': 'unittestpasswordhash',
-            'profile_image_url': 'unittestuser.png'  # Include if required
-        })
-        self.assertEqual(response.status_code, 201)
-        self.assertIn(b'unittestuser', response.data)
+def test_view_all_recipes(test_client, init_database):
+    response = test_client.get('/recipes')
+    assert response.status_code == 200
 
-    def test_get_users(self):
-        response = self.app.get('/users')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b'unittestuser', response.data)
+def test_view_single_recipe(test_client, init_database):
+    response = test_client.get('/recipes/1')
+    assert response.status_code == 200
+
+def test_search_recipes(test_client, init_database):
+    response = test_client.get('/recipes?search=pasta')
+    assert response.status_code == 200
+
+def test_filter_recipes(test_client, init_database):
+    response = test_client.get('/recipes?country=Italy&rating=5&ingredients=tomato&servings=4&createdDateTime=2023-01-01')
+    assert response.status_code == 200
+
+def test_create_recipe(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    access_token = login_response.json['access_token']
+    response = test_client.post('/recipes', json={
+        'title': 'New Recipe',
+        'description': 'Delicious new recipe'
+    }, headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 201
+    assert b'New Recipe' in response.data
+
+def test_update_recipe(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    access_token = login_response.json['access_token']
+    response = test_client.put('/recipes/1', json={
+        'title': 'Updated Recipe',
+        'description': 'Updated delicious recipe'
+    }, headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 200
+    assert b'Updated Recipe' in response.data
+
+def test_delete_recipe(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    access_token = login_response.json['access_token']
+    response = test_client.delete('/recipes/1', headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 204
+
+def test_bookmark_recipe(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    access_token = login_response.json['access_token']
+    response = test_client.post('/recipes/1/bookmark', headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 201
+
+def test_view_bookmarked_recipes(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    access_token = login_response.json['access_token']
+    response = test_client.get('/profile/bookmarks', headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 200
+
+def test_add_comment(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    access_token = login_response.json['access_token']
+    response = test_client.post('/recipes/1/comments', json={
+        'content': 'Great recipe!'
+    }, headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 201
+
+def test_rate_recipe(test_client, init_database):
+    login_response = test_client.post('/login', json={
+        'email': 'testuser1@example.com',
+        'password': 'password_hash1'
+    })
+    access_token = login_response.json['access_token']
+    response = test_client.post('/recipes/1/ratings', json={
+        'rating': 5
+    }, headers={
+        'Authorization': f'Bearer {access_token}'
+    })
+    assert response.status_code == 201
 
 if __name__ == "__main__":
     unittest.main()
