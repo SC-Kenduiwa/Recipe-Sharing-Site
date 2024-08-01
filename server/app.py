@@ -4,11 +4,17 @@ from flask_restful import Resource
 from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity
 from models import User, Recipe, Comment, Rating, Bookmark
 from sqlalchemy import or_
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
+
+def upload_image_to_cloudinary(image_url):
+    result = upload(image_url)
+    cloudinary_image_url, _ = cloudinary_url(result['public_id'], width=300, height=300, crop="fill")
+    return cloudinary_image_url
 
 class Signup(Resource):
     def post(self):
         data = request.get_json()
-
         username = data.get('username')
         email = data.get('email')
         password = data.get('password')
@@ -23,10 +29,16 @@ class Signup(Resource):
         if User.query.filter_by(email=email).first():
             return {"error": "Email already exists"}, 400
 
+        # Upload profile image to Cloudinary
+        try:
+            cloudinary_profile_image_url = upload_image_to_cloudinary(profile_image_url)
+        except Exception as e:
+            return {"error": f"Image upload failed: {str(e)}"}, 500
+
         new_user = User(
             username=username,
             email=email,
-            profile_image_url=profile_image_url
+            profile_image_url=cloudinary_profile_image_url
         )
         new_user.password = password  # This will hash the password
 
@@ -145,23 +157,30 @@ class RecipeResource(Resource):
         
         if not user:
             return {"error": "User not found"}, 404
-        
-        new_recipe = Recipe(
-            title=data.get('title'),
-            description=data.get('description'),
-            ingredients=data.get('ingredients'),
-            procedure=data.get('procedure'),
-            servings=data.get('servings'),
-            cooking_time=data.get('cooking_time'),
-            difficulty_level=data.get('difficulty_level'),
-            country=data.get('country'),
-            user_id=current_user_id
-        )
-        
-        db.session.add(new_recipe)
-        db.session.commit()
-        
-        return {"message": "Recipe created successfully", "recipe": self.format_recipe(new_recipe)}, 201
+
+        try:
+            # Upload recipe image to Cloudinary
+            cloudinary_recipe_image_url = upload_image_to_cloudinary(data.get('recipe_image_url'))
+
+            new_recipe = Recipe(
+                recipe_image_url=cloudinary_recipe_image_url,
+                title=data.get('title'),
+                description=data.get('description'),
+                ingredients=data.get('ingredients'),
+                procedure=data.get('procedure'),
+                servings=data.get('servings'),
+                cooking_time=data.get('cooking_time'),
+                difficulty_level=data.get('difficulty_level'),
+                country=data.get('country'),
+                user_id=current_user_id
+            )
+            
+            db.session.add(new_recipe)
+            db.session.commit()
+            
+            return {"message": "Recipe created successfully", "recipe": self.format_recipe(new_recipe)}, 201
+        except Exception as e:
+            return {"error": str(e)}, 500
 
     @jwt_required()
     def put(self, recipe_id):
@@ -172,6 +191,10 @@ class RecipeResource(Resource):
         if recipe.user_id != current_user_id:
             return {"error": "Permission denied"}, 403
         
+        # Optionally upload a new recipe image to Cloudinary
+        if data.get('recipe_image_url'):
+            recipe.recipe_image_url = upload_image_to_cloudinary(data.get('recipe_image_url'))
+
         recipe.title = data.get('title', recipe.title)
         recipe.description = data.get('description', recipe.description)
         recipe.ingredients = data.get('ingredients', recipe.ingredients)
@@ -184,6 +207,7 @@ class RecipeResource(Resource):
         db.session.commit()
         
         return {"message": "Recipe updated successfully", "recipe": self.format_recipe(recipe)}, 200
+
 
     @jwt_required()
     def delete(self, recipe_id):
@@ -205,6 +229,7 @@ class RecipeResource(Resource):
 
         data = {
             'id': recipe.id,
+            "recipe_image_url": recipe.recipe_image_url,
             'title': recipe.title,
             'description': recipe.description,
             'ingredients': recipe.ingredients,
@@ -467,7 +492,7 @@ class BookmarkResource(Resource):
 
 
 
-# Add these resources to your API
+
 api.add_resource(UserProfile, '/profile')
 api.add_resource(Signup, '/users')
 api.add_resource(Login, '/login')
