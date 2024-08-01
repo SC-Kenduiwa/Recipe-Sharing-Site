@@ -124,6 +124,27 @@ class TestApp(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('recipe', data)
 
+    def test_get_recipes_with_search_query(self):
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Searchable Recipe',
+            'description': 'A test recipe for searching',
+            'ingredients': json.dumps(['search_ingredient']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Search Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        self.app.post('/recipes', json=recipe_data, headers=headers)
+        response = self.app.get('/recipes?search=Searchable')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('recipes', data)
+        self.assertGreater(len(data['recipes']), 0)
+
+
     def test_update_recipe(self):
         # First create a recipe
         headers = self.get_auth_headers()
@@ -195,6 +216,70 @@ class TestApp(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('comment', data)
 
+
+    def test_update_comment(self):
+        # First create a recipe and a comment
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe',
+            'description': 'A test recipe',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
+
+        comment_data = {'content': 'Test comment'}
+        comment_response = self.app.post(f'/recipes/{recipe_id}/comments', json=comment_data, headers=headers)
+        comment_id = json.loads(comment_response.data)['comment']['id']
+
+        # Now update the comment
+        updated_comment_data = {'content': 'Updated comment'}
+        response = self.app.put(f'/recipes/{recipe_id}/comments/{comment_id}', json=updated_comment_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertEqual(data['comment']['content'], 'Updated comment')
+
+    def test_delete_comment(self):
+        # First, create a recipe
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe for Comment Deletion',
+            'description': 'A test recipe for deleting a comment',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
+
+        # Then, create a comment
+        comment_data = {'content': 'Test comment for deletion'}
+        create_comment_response = self.app.post(f'/recipes/{recipe_id}/comments', json=comment_data, headers=headers)
+        self.assertEqual(create_comment_response.status_code, 201)
+        comment_id = json.loads(create_comment_response.data)['comment']['id']
+
+        # Now, delete the comment
+        delete_response = self.app.delete(f'/recipes/{recipe_id}/comments/{comment_id}', headers=headers)
+        self.assertEqual(delete_response.status_code, 200)
+        data = json.loads(delete_response.data)
+        self.assertIn('message', data)
+        self.assertEqual(data['message'], 'Comment deleted successfully')
+
+        # Verify the comment is deleted by attempting to retrieve it
+        get_comment_response = self.app.get(f'/recipes/{recipe_id}/comments/{comment_id}', headers=headers)
+        self.assertEqual(get_comment_response.status_code, 404)
+
+
     def test_create_rating(self):
         # First create a recipe
         headers = self.get_auth_headers()
@@ -219,6 +304,39 @@ class TestApp(unittest.TestCase):
         data = json.loads(response.data)
         self.assertIn('rating', data)
 
+    def test_delete_rating(self):
+    # First create a recipe
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe for Rating Deletion',
+            'description': 'A test recipe for deleting a rating',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
+
+    # Create a rating
+        rating_data = {'value': 4}
+        rating_response = self.app.post(f'/recipes/{recipe_id}/ratings', json=rating_data, headers=headers)
+        self.assertEqual(rating_response.status_code, 201)
+        rating_id = json.loads(rating_response.data)['rating']['id']
+
+    # Delete the rating
+        delete_response = self.app.delete(f'/recipes/{recipe_id}/ratings/{rating_id}', headers=headers)
+        self.assertEqual(delete_response.status_code, 200)
+        data = json.loads(delete_response.data)
+        self.assertIn('message', data)
+        self.assertEqual(data['message'], 'Rating deleted successfully')
+
+
+
+
     def test_create_bookmark(self):
         # First create a recipe
         headers = self.get_auth_headers()
@@ -241,6 +359,36 @@ class TestApp(unittest.TestCase):
         self.assertEqual(response.status_code, 201)
         data = json.loads(response.data)
         self.assertIn('bookmark', data)
+
+    def test_delete_bookmark(self):
+        # Create a recipe
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe for Bookmark Deletion',
+            'description': 'A test recipe for deleting a bookmark',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
+
+        # Create a bookmark
+        bookmark_response = self.app.post(f'/recipes/{recipe_id}/bookmarks', headers=headers)
+        self.assertEqual(bookmark_response.status_code, 201)
+        bookmark_id = json.loads(bookmark_response.data)['bookmark']['id']
+
+        # Delete the bookmark
+        delete_response = self.app.delete(f'/recipes/{recipe_id}/bookmarks/{bookmark_id}', headers=headers)
+        self.assertEqual(delete_response.status_code, 200)
+        data = json.loads(delete_response.data)
+        self.assertIn('message', data)
+        self.assertEqual(data['message'], 'Bookmark deleted successfully')
+
 
 if __name__ == '__main__':
     unittest.main()
