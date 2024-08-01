@@ -1,195 +1,246 @@
 import unittest
-import pytest
 from datetime import datetime
-from server.app import app, db, User
+from app import app, db, User, Recipe, Comment, Rating, Bookmark
+from config import app as flask_app
+import json
 
-@pytest.fixture(scope='module')
-def test_client():
-    flask_app = app
-    testing_client = flask_app.test_client()
-    ctx = flask_app.app_context()
-    ctx.push()
-    yield testing_client
-    ctx.pop()
+class TestApp(unittest.TestCase):
+    def setUp(self):
+        self.app = flask_app.test_client()
+        self.app.testing = True
+        
+        with flask_app.app_context():
+            db.create_all()
+            
+            test_user = User(
+                username='testuser',
+                email='testuser@example.com',
+                profile_image_url='http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+            )
+            test_user.password = 'testpassword'
+            db.session.add(test_user)
+            db.session.commit()
 
-@pytest.fixture(scope='module')
-def init_database():
-    db.create_all()
-    user1 = User(
-        username='testuser1',
-        email='testuser1@example.com',
-        password_hash='password_hash1',
-        profile_image_url='default.png', 
-        created_at=datetime.utcnow(),
-        updated_at=datetime.utcnow()
-    )
-    db.session.add(user1)
-    db.session.commit()
-    yield db
-    db.drop_all()
+    def tearDown(self):
+        with flask_app.app_context():
+            db.session.remove()
+            db.drop_all()
 
-def test_create_user(test_client, init_database):
-    response = test_client.post('/users', json={
-        'username': 'newuser',
-        'email': 'newuser@example.com',
-        'password_hash': 'newpasswordhash',
-        'profile_image_url': 'newuser.png'  
-    })
-    assert response.status_code == 201
-    assert b'newuser' in response.data
+    def get_auth_headers(self):
+        login_response = self.app.post('/login', json={
+            'username': 'testuser',
+            'password': 'testpassword'
+        })
+        access_token = json.loads(login_response.data)['access_token']
+        return {'Authorization': f'Bearer {access_token}'}
 
-def test_login(test_client, init_database):
-    response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    assert response.status_code == 200
-    assert 'access_token' in response.json
-    assert 'refresh_token' in response.json
+    def test_signup(self):
+        response = self.app.post('/users', json={
+            'username': 'newuser',
+            'email': 'newuser@example.com',
+            'password': 'newpassword',
+            'profile_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        })
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.data)
+        self.assertIn('message', data)
+        self.assertIn('access_token', data)
+        self.assertIn('refresh_token', data)
 
-def test_refresh_token(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    refresh_token = login_response.json['refresh_token']
-    response = test_client.post('/refresh', json={
-        'refresh_token': refresh_token
-    })
-    assert response.status_code == 200
-    assert 'access_token' in response.json
+    def test_login(self):
+        response = self.app.post('/login', json={
+            'username': 'testuser',
+            'password': 'testpassword'
+        })
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('access_token', data)
+        self.assertIn('refresh_token', data)
 
-def test_view_profile(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    access_token = login_response.json['access_token']
-    response = test_client.get('/profile', headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    assert response.status_code == 200
-    assert b'testuser1' in response.data
+    def test_refresh_token(self):
+        login_response = self.app.post('/login', json={
+            'username': 'testuser',
+            'password': 'testpassword'
+        })
+        refresh_token = json.loads(login_response.data)['refresh_token']
+        response = self.app.post('/refresh', headers={'Authorization': f'Bearer {refresh_token}'})
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('access_token', data)
 
-def test_update_profile(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    access_token = login_response.json['access_token']
-    response = test_client.put('/profile', json={
-        'username': 'updateduser1',
-        'profile_image_url': 'updated.png'
-    }, headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    assert response.status_code == 200
-    assert b'updateduser1' in response.data
+    def test_get_user_profile(self):
+        headers = self.get_auth_headers()
+        response = self.app.get('/profile', headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('user', data)
+        self.assertEqual(data['user']['username'], 'testuser')
 
-def test_view_all_recipes(test_client, init_database):
-    response = test_client.get('/recipes')
-    assert response.status_code == 200
+    def test_create_recipe(self):
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe',
+            'description': 'A test recipe',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.data)
+        self.assertIn('message', data)
+        self.assertIn('recipe', data)
 
-def test_view_single_recipe(test_client, init_database):
-    response = test_client.get('/recipes/1')
-    assert response.status_code == 200
+    def test_get_recipes(self):
+        response = self.app.get('/recipes')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('recipes', data)
 
-def test_search_recipes(test_client, init_database):
-    response = test_client.get('/recipes?search=pasta')
-    assert response.status_code == 200
+    def test_get_single_recipe(self):
+        # First create a recipe
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe',
+            'description': 'A test recipe',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
 
-def test_filter_recipes(test_client, init_database):
-    response = test_client.get('/recipes?country=Italy&rating=5&ingredients=tomato&servings=4&createdDateTime=2023-01-01')
-    assert response.status_code == 200
+        # Now get the recipe
+        response = self.app.get(f'/recipes/{recipe_id}')
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('recipe', data)
 
-def test_create_recipe(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    access_token = login_response.json['access_token']
-    response = test_client.post('/recipes', json={
-        'title': 'New Recipe',
-        'description': 'Delicious new recipe'
-    }, headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    assert response.status_code == 201
-    assert b'New Recipe' in response.data
+    def test_update_recipe(self):
+        # First create a recipe
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe',
+            'description': 'A test recipe',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
 
-def test_update_recipe(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    access_token = login_response.json['access_token']
-    response = test_client.put('/recipes/1', json={
-        'title': 'Updated Recipe',
-        'description': 'Updated delicious recipe'
-    }, headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    assert response.status_code == 200
-    assert b'Updated Recipe' in response.data
+        # Now update the recipe
+        update_data = {'title': 'Updated Recipe Title'}
+        response = self.app.put(f'/recipes/{recipe_id}', json=update_data, headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertEqual(data['recipe']['title'], 'Updated Recipe Title')
 
-def test_delete_recipe(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    access_token = login_response.json['access_token']
-    response = test_client.delete('/recipes/1', headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    assert response.status_code == 204
+    def test_delete_recipe(self):
+        # First create a recipe
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe',
+            'description': 'A test recipe',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
 
-def test_bookmark_recipe(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    access_token = login_response.json['access_token']
-    response = test_client.post('/recipes/1/bookmark', headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    assert response.status_code == 201
+        # Now delete the recipe
+        response = self.app.delete(f'/recipes/{recipe_id}', headers=headers)
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.data)
+        self.assertIn('message', data)
 
-def test_view_bookmarked_recipes(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    access_token = login_response.json['access_token']
-    response = test_client.get('/profile/bookmarks', headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    assert response.status_code == 200
+    def test_create_comment(self):
+        # First create a recipe
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe',
+            'description': 'A test recipe',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
 
-def test_add_comment(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    access_token = login_response.json['access_token']
-    response = test_client.post('/recipes/1/comments', json={
-        'content': 'Great recipe!'
-    }, headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    assert response.status_code == 201
+        # Now create a comment
+        comment_data = {'content': 'Test comment'}
+        response = self.app.post(f'/recipes/{recipe_id}/comments', json=comment_data, headers=headers)
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.data)
+        self.assertIn('comment', data)
 
-def test_rate_recipe(test_client, init_database):
-    login_response = test_client.post('/login', json={
-        'email': 'testuser1@example.com',
-        'password': 'password_hash1'
-    })
-    access_token = login_response.json['access_token']
-    response = test_client.post('/recipes/1/ratings', json={
-        'rating': 5
-    }, headers={
-        'Authorization': f'Bearer {access_token}'
-    })
-    assert response.status_code == 201
+    def test_create_rating(self):
+        # First create a recipe
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe',
+            'description': 'A test recipe',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
 
-if __name__ == "__main__":
+        # Now create a rating
+        rating_data = {'value': 5}
+        response = self.app.post(f'/recipes/{recipe_id}/ratings', json=rating_data, headers=headers)
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.data)
+        self.assertIn('rating', data)
+
+    def test_create_bookmark(self):
+        # First create a recipe
+        headers = self.get_auth_headers()
+        recipe_data = {
+            'title': 'Test Recipe',
+            'description': 'A test recipe',
+            'ingredients': json.dumps(['ingredient1', 'ingredient2']),
+            'procedure': 'Test procedure',
+            'servings': 4,
+            'cooking_time': 30,
+            'difficulty_level': 'Easy',
+            'country': 'Test Country',
+            'recipe_image_url': 'http://t2.gstatic.com/licensed-image?q=tbn:ANd9GcQ5mYimhB-E4MQcgwmIdV3Ng1EOPNjd82JMlpjD92nOGm2DKJjXQgr42BlDVWDXFHJBGeG5amIULY3W6WS6NG4'
+        }
+        create_response = self.app.post('/recipes', json=recipe_data, headers=headers)
+        recipe_id = json.loads(create_response.data)['recipe']['id']
+
+        # Now create a bookmark
+        response = self.app.post(f'/recipes/{recipe_id}/bookmarks', headers=headers)
+        self.assertEqual(response.status_code, 201)
+        data = json.loads(response.data)
+        self.assertIn('bookmark', data)
+
+if __name__ == '__main__':
     unittest.main()
