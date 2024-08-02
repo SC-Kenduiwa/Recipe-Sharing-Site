@@ -289,6 +289,42 @@ class UserProfile(Resource):
             "recipes": recipes,
             "bookmarks": bookmarks
         }, 200
+    
+    @jwt_required()
+    def put(self):
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
+        
+        if not user:
+            return {"error": "User not found"}, 404
+        
+        data = request.get_json()
+        
+        # Update user fields
+        if 'username' in data:
+            user.username = data['username']
+        if 'email' in data:
+            user.email = data['email']
+        if 'profile_image_url' in data:
+            try:
+                user.profile_image_url = upload_image_to_cloudinary(data['profile_image_url'])
+            except Exception as e:
+                return {"error": f"Image upload failed: {str(e)}"}, 500
+        
+        # You might want to add more fields here as needed
+        
+        db.session.commit()
+        
+        updated_user_data = {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "profile_image_url": user.profile_image_url,
+            "created_at": user.created_at.isoformat(),
+            "updated_at": user.updated_at.isoformat()
+        }
+        
+        return {"message": "User profile updated successfully", "user": updated_user_data}, 200
 
     def format_recipe(self, recipe):
         return {
