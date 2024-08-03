@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Ensure Link is imported from react-router-dom
 import './Footer.css';
 
 const Footer = () => (
@@ -12,9 +13,9 @@ const Footer = () => (
                     <Link to="/profile">Profile</Link>
                 </div>
                 <div className="social-links">
-                    <a href="#">Facebook</a>
-                    <a href="#">Instagram</a>
-                    <a href="#">Twitter</a>
+                    <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href="https://www.twitter.com" target="_blank" rel="noopener noreferrer">Twitter</a>
                 </div>
             </div>
         </div>
