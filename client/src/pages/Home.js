@@ -10,9 +10,9 @@ const Home = () => (
         <div className="featured-recipes">
             <h2>Featured Recipes</h2>
             <div className="recipe-cards">
-                <RecipeCard image="/assets/images/fried-spaghetti.jpg" title="Fried Spaghetti" description="The ultimate hangover recipe" />
-                <RecipeCard image="/assets/images/meat-deluxe-pizza.jpg" title="Meat Deluxe Pizza" description="The ultimate hangover recipe" />
-                <RecipeCard image="/assets/images/grilled-chicken.jpg" title="Grilled Chicken" description="The ultimate hangover recipe" />
+                <RecipeCard image="client/src/assets/images/fried-spaghetti.jpg" title="Fried Spaghetti" description="The ultimate hangover recipe" />
+                <RecipeCard image="client/src/assets/images/meat-deluxe-pizza.jpg" title="Meat Deluxe Pizza" description="The ultimate hangover recipe" />
+                <RecipeCard image="client/src/assets/images/grilled-chicken.jpg" title="Grilled Chicken" description="The ultimate hangover recipe" />
             </div>
         </div>
     </div>
