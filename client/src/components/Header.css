@@ -2,6 +2,9 @@
   background-color: #002147;
   padding: 1rem 0;
   color: #fff;
+}
+
+.container {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -11,10 +14,11 @@
   color: #ffa500;
   font-size: 1.5rem;
   text-decoration: none;
+  flex: 1;
 }
 
 .nav {
-  flex-grow: 1;
+  flex: 2;
   display: flex;
   justify-content: center;
 }
@@ -29,6 +33,8 @@
 .auth-links {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
+  flex: 1;
 }
 
 .auth-links a {
