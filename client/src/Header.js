@@ -1,21 +1,40 @@
-
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => (
     <header className="header">
         <div className="container">
-            <Link to="/" className="logo">RecipeConnect</Link>
             <nav className="nav">
-                <Link to="/about">About Us</Link>
-                <Link to="/recipes">Recipes</Link>
-                <Link to="/profile">Profile</Link>
+                <div className="logo">
+                    <NavLink to="/">
+                        <span className="recipe">Recipe</span>
+                        <span className="connect">Connect</span>
+                    </NavLink>
+                </div>
+                <ul className="main-nav">
+                    <li>
+                        <NavLink to="/" className={({isActive}) => isActive ? 'home active' : 'home'}>Home</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/about" className={({isActive}) => isActive ? 'about active' : 'about'}>About Us</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/recipes" className={({isActive}) => isActive ? 'recipes active' : 'recipes'}>Recipes</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/profile" className={({isActive}) => isActive ? 'profile active' : 'profile'}>Profile</NavLink>
+                    </li>
+                </ul>
+                <ul className="auth-nav">
+                    <li>
+                        <NavLink to="/signup" className={({isActive}) => isActive? 'signup active' : 'signup'}>Sign Up</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/login" className={({isActive}) => isActive? 'login active' : 'login'}>Log In</NavLink>
+                    </li>
+                </ul>
             </nav>
-            <div className="auth-links">
-                <Link to="/login">Log In</Link>
-                <Link to="/signup">Sign Up</Link>
-            </div>
         </div>
     </header>
 );
