@@ -1,0 +1,18 @@
+.recipe-card {
+  text-align: center;
+  margin: 1rem;
+}
+
+.recipe-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.recipe-card h3 {
+  color: #002147;
+}
+
+.recipe-card p {
+  color: #ffa500;
+}
