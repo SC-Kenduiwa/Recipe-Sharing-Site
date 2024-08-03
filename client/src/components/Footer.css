@@ -1,0 +1,18 @@
+.footer {
+  background-color: #002147;
+  color: #fff;
+  padding: 1rem 0;
+  margin-top: 2rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: space-between;
+}
+
+.top-links a,
+.social-links a {
+  color: #fff;
+  margin: 0 0.5rem;
+  text-decoration: none;
+}
