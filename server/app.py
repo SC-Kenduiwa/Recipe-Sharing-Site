@@ -248,16 +248,22 @@ class RecipeResource(Resource):
             data['comments'] = [self.format_comment(comment) for comment in recipe.comments]
             data['bookmark_count'] = Bookmark.query.filter_by(recipe_id=recipe.id).count()
         
+        
         return data
 
     def format_comment(self, comment):
         return {
             'id': comment.id,
             'content': comment.content,
-            'user_id': comment.user_id,
+            'user': {
+                'id': comment.user.id,
+                'username': comment.user.username,
+                'profile_image_url': comment.user.profile_image_url
+            },
             'created_at': comment.created_at.isoformat() if comment.created_at else None,
             'updated_at': comment.updated_at.isoformat() if comment.updated_at else None
-        }
+    }
+
 
 
 class UserProfile(Resource):
