@@ -1,23 +1,31 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
 .home {
   text-align: center;
   padding: 1rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; 
+  justify-content: flex-start;
+  width: 100%;
   height: 1200px; 
-  overflow: hidden;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 .featured-image-container {
   width: 100%;
-  max-width: 900px;
   height: 500px; 
   margin-bottom: 1rem;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .featured-image {
@@ -28,12 +36,16 @@
 
 .featured-recipes {
   padding: 1rem 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .recipe-cards {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .recipe-card {
