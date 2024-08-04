@@ -1,0 +1,51 @@
+.header {
+  background-color: #002147;
+  padding: 1rem 0;
+  color: #fff;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 1.5rem;
+  text-decoration: none;
+  flex: 1;
+}
+
+.logo-recipe {
+  color: #ffa500;
+}
+
+.logo-connect {
+  color: #fff;
+}
+
+.nav {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.nav-link {
+  color: #fff;
+  margin: 0 1rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.auth-links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+
+.auth-links a {
+  color: #fff;
+  margin: 0 0.5rem;
+  text-decoration: none;
+}
