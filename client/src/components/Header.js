@@ -5,7 +5,10 @@ import './Header.css';
 const Header = () => (
     <header className="header">
         <div className="container">
-            <Link to="/" className="logo">RecipeConnect</Link>
+            <Link to="/" className="logo">
+                <span className="logo-recipe">Recipe</span>
+                <span className="logo-connect">Connect</span>
+            </Link>
             <nav className="nav">
                 <Link to="/" className="nav-link">Home</Link>
                 <Link to="/recipes" className="nav-link">Recipes</Link>

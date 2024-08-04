@@ -11,10 +11,17 @@
 }
 
 .logo {
-  color: #ffa500;
   font-size: 1.5rem;
   text-decoration: none;
   flex: 1;
+}
+
+.logo-recipe {
+  color: #ffa500;
+}
+
+.logo-connect {
+  color: #fff;
 }
 
 .nav {
