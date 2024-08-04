@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Footer.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import './Footer.css';
 
 const Footer = () => {
     const socialLinks = [
@@ -21,11 +21,12 @@ const Footer = () => {
     return (
         <footer className="footer">
             <div className="container">
-                <p>RecipeConnect aims to make cooking enjoyable...</p>
+                <p className="footer-text">RecipeConnect aims to make cooking enjoyable...</p>
                 <div className="footer-links">
                     <div className="top-links">
                         <h4>Top Links</h4>
                         <Link to="/">Home</Link>
+                        <Link to="/about">About</Link>
                         <Link to="/recipes">Recipes</Link>
                         <Link to="/profile">Profile</Link>
                     </div>
