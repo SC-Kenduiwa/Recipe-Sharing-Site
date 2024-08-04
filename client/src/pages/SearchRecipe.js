@@ -1,8 +1,11 @@
 import React from 'react'
+import './SearchRecipe.css'
 
 function SearchRecipe() {
   return (
-    <div>SearchRecipe</div>
+    <div className='search-recipe'>
+        <input className="search" type="text" placeholder="Search recipe..." />
+    </div>
   )
 }
 
