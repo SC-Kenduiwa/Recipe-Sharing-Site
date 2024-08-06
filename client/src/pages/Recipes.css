@@ -1,14 +1,15 @@
 .recipe-container{
-    background-color: #002147;
-    border: 10px;
-    border-top: #E17D07;
-    border-bottom: #E17D07;
+    background-color: #fff;
 }
 
 .heading{
-    color: #fff;
     padding: 20px;
     text-align: center;
     font-size: 35px;
     font-weight: 700;
+}
+
+.recipe-image{
+    width: 100%;
+    height: auto;
 }

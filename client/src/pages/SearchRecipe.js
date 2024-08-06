@@ -4,7 +4,12 @@ import './SearchRecipe.css'
 function SearchRecipe() {
   return (
     <div className='search-recipe'>
-        <input className="search" type="text" placeholder="Search recipe..." />
+        <i className="fa fa-search" aria-hidden="true"></i>
+        <input 
+        className="search" 
+        type="text" 
+        placeholder="Search recipe..." 
+        />
     </div>
   )
 }
