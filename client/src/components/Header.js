@@ -1,26 +1,18 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './Header.css';
 
-const Header = () => (
+const Header = () => {
+  return (
     <header className="header">
-        <div className="container">
-            <Link to="/" className="logo">
-                <span className="logo-recipe">Recipe</span>
-                <span className="logo-connect">Connect</span>
-            </Link>
-            <nav className="nav">
-                <Link to="/" className="nav-link">Home</Link>
-                <Link to="/about" className="nav-link">About</Link>
-                <Link to="/recipes" className="nav-link">Recipes</Link>
-                <Link to="/profile" className="nav-link">Profile</Link>
-            </nav>
-            <div className="auth-links">
-                <Link to="/login">Log In</Link>
-                <Link to="/signup">Sign Up</Link>
-            </div>
-        </div>
+      <h1>Delicious Food & Recipes For Your Loved Ones</h1>
+      <button>Explore Recipes</button>
+      <div className="header-images">
+        <img src={require('../assets/image1.jpg')} alt="Delicious food" />
+        <img src={require('../assets/image2.jpg')} alt="Delicious food" />
+        <img src={require('../assets/image3.jpg')} alt="Delicious food" />
+      </div>
     </header>
-);
+  );
+};
 
 export default Header;
