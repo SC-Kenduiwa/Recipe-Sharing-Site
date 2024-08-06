@@ -173,9 +173,9 @@ const RecipeDetails = () => {
       <h1>{recipe.title}</h1>
       <div className="recipe-rating">
         {[1, 2, 3, 4, 5].map((star) => (
-          <FaStar key={star} className={star <= recipe.average_rating ? 'star-filled' : 'star-empty'} />
+          <FaStar key={star} className={star <= (recipe.average_rating || 0) ? 'star-filled' : 'star-empty'} />
         ))}
-        <span>{recipe.average_rating.toFixed(1)}</span>
+        <span>{typeof recipe.average_rating === 'number' ? recipe.average_rating.toFixed(1) : 'N/A'}</span>
       </div>
       <img src={recipe.recipe_image_url} alt={recipe.title} className="recipe-imagee" />
 
