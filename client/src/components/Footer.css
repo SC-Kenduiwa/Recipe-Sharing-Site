@@ -44,25 +44,33 @@
   color: #ddd;
 }
 
-.social-media .social-links {
+.social-media {
   display: flex;
-  gap: 10px;
+  flex-direction: column;
 }
 
-.social-media .social-links a {
+.social-media h4 {
+  margin-bottom: 10px;
+}
+
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.social-links a {
   color: #fff;
-  text-decoration: none;
-  font-size: 18px;
+  font-size: 24px;
   transition: color 0.3s;
 }
 
-.social-media .social-links a:hover {
+.social-links a:hover {
   color: #ddd;
 }
 
 .footer-bottom {
   text-align: center;
   padding-top: 20px;
-  border-top: 1px solid #ddd;
   margin-top: 20px;
 }
