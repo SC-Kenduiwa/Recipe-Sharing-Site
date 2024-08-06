@@ -1,11 +1,12 @@
 import React from 'react';
 import './Navbar.css';
+import Logo from './Logo';
 
 const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <img src={require('../assets/logo.png')} alt="RecipeConnect Logo" />
+        <Logo />
       </div>
       <ul className="navbar-links">
         <li><a href="#home">Home</a></li>
