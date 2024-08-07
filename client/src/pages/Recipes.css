@@ -1,0 +1,15 @@
+.recipe-container{
+    background-color: #fff;
+}
+
+.heading{
+    padding: 20px;
+    text-align: center;
+    font-size: 35px;
+    font-weight: 700;
+}
+
+.recipe-image{
+    width: 100%;
+    height: auto;
+}
