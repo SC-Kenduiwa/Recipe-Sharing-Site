@@ -2,19 +2,19 @@
 
 # Table of Contents
 
-Introduction
-Problem Statement
-Solution
-Future Considerations
-Team
-Minimum Viable Product (MVP)
-Technical Expectations
-Setup and Installation
-Usage
-Testing
-Contributing
-License
-Contact
+1. Introduction
+2. Problem Statement
+3. Solution
+4. Future Considerations
+5. Team
+6. Minimum Viable Product (MVP)
+7. Technical Expectations
+8. Setup and Installation
+9. Usage
+10. Testing
+11. Contributing
+12. License
+13. Contact
 
  # Introduction
 Finding the right recipe online can be a hassle, especially when most available recipes are for high-end meals that may not be feasible in a middle-class to lower-class home or restaurant. Our application aims to solve this problem by providing a platform where users can find and share simple recipes.
