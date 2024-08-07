@@ -4,6 +4,7 @@ import Header from './components/Header';
 import FeaturedRecipes from './components/FeaturedRecipes';
 import TopRecipe from './components/TopRecipe';
 import Footer from './components/Footer';
+import Recipes from './pages/Recipes';  
 import './App.css';
 
 function App() {
@@ -13,9 +14,10 @@ function App() {
       <Header />
       <FeaturedRecipes />
       <TopRecipe />
+      <Recipes/>
       <Footer />
     </div>
   );
 }
 
-export default App;
+export default App
