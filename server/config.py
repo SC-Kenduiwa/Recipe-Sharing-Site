@@ -19,9 +19,9 @@ app.json.compact = False
 CORS(app)
 
 cloudinary.config(
-    cloud_name='dsmof3lkd',
-    api_key='831315369772392',
-    api_secret='jVk2IKptlQh_u4eS2q1BAP-VCvI'
+    cloud_name='',
+    api_key='',
+    api_secret=''
 )
 
 metadata = MetaData(naming_convention={
