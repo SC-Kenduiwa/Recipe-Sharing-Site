@@ -6,6 +6,7 @@ from models import User, Recipe, Comment, Rating, Bookmark
 from sqlalchemy import or_
 from cloudinary.uploader import upload
 from cloudinary.utils import cloudinary_url
+from datetime import timedelta, datetime
 
 def upload_image_to_cloudinary(image_url):
     result = upload(image_url)
@@ -45,7 +46,7 @@ class Signup(Resource):
         db.session.add(new_user)
         db.session.commit()
 
-        access_token = create_access_token(identity=new_user.id)
+        access_token = create_access_token(identity=new_user.id, expires_delta=timedelta(days=36500))
         refresh_token = create_refresh_token(identity=new_user.id)
 
         return {
@@ -67,7 +68,7 @@ class Login(Resource):
         user = User.query.filter_by(username=username).first()
 
         if user and user.authenticate(password):
-            access_token = create_access_token(identity=user.id)
+            access_token = create_access_token(identity=user.id, expires_delta=timedelta(days=36500))
             refresh_token = create_refresh_token(identity=user.id)
             return {
                 "access_token": access_token,
@@ -203,6 +204,7 @@ class RecipeResource(Resource):
         recipe.cooking_time = data.get('cooking_time', recipe.cooking_time)
         recipe.difficulty_level = data.get('difficulty_level', recipe.difficulty_level)
         recipe.country = data.get('country', recipe.country)
+        recipe.updated_at = datetime.utcnow()
         
         db.session.commit()
         
