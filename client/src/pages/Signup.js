@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Signup.css';
 
 const Signup = () => {
     const [username, setUsername] = useState('');
@@ -8,29 +9,29 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null); 
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
-    // Function to handle image upload to Cloudinary
+    
     const handleImageUpload = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('upload_preset', 'RECIPE'); // Your signed upload preset
+        formData.append('upload_preset', 'RECIPE');
 
         try {
             const response = await axios.post(
-                'https://api.cloudinary.com/v1_1/dgf4hmhqn/image/upload',
+                'https://api.cloudinary.com/v1_1/dsmof3lkd/image/upload',
                 formData,
                 {
                     headers: {
-                        'Content-Type': 'multipart/form-data' // Ensure correct content type
+                        'Content-Type': 'multipart/form-data'
                     }
                 }
             );
-            return response.data.secure_url; // Return the URL of the uploaded image
+            return response.data.secure_url;
         } catch (err) {
             console.error('Error uploading image:', err);
-            console.error('Error details:', err.response?.data);
             setError('Error uploading image: ' + (err.response?.data?.error?.message || err.message));
             return null;
         }
@@ -39,7 +40,7 @@ const Signup = () => {
     // Function to handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(''); // Clear any previous errors
+        setError('');
 
         if (password !== confirmPassword) {
             setError('Passwords do not match');
@@ -62,18 +63,17 @@ const Signup = () => {
         }
 
         try {
-            const response = await axios.post('/users', { 
+            const response = await axios.post('/users', {
                 username,
-                email, 
-                password, 
+                email,
+                password,
                 profile_image_url: profileImageUrl
             });
-            
-            // Handle the tokens returned from the backend
+
             const { access_token, refresh_token } = response.data;
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('refresh_token', refresh_token);
-            
+
             navigate('/login');
         } catch (err) {
             console.error('Error in signup:', err);
@@ -81,59 +81,88 @@ const Signup = () => {
         }
     };
 
+    // Function to handle image file selection
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
+
+        if (file) {
+            const imageURL = URL.createObjectURL(file);
+            setImagePreview(imageURL);
+        }
+    };
+
+    // Cleanup function for the image preview
+    useEffect(() => {
+        return () => {
+            if (imagePreview) {
+                URL.revokeObjectURL(imagePreview);
+            }
+        };
+    }, [imagePreview]);
+
     return (
-        <div>
-            <h2>Signup</h2>
+        <div className="signup-container">
+            <h2>Sign up</h2>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Username:</label>
+                <div className="input-group">
                     <input
                         type="text"
+                        placeholder="Username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
                     />
                 </div>
-                <div>
-                    <label>Email:</label>
+                <div className="input-group">
                     <input
                         type="email"
+                        placeholder="Email ID"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                 </div>
-                <div>
-                    <label>Password:</label>
+                <div className="input-group">
                     <input
                         type="password"
+                        placeholder="Password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
                 </div>
-                <div>
-                    <label>Confirm Password:</label>
+                <div className="input-group">
                     <input
                         type="password"
+                        placeholder="Confirm Password"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
                     />
                 </div>
-                <div>
-                    <label>Profile Image:</label>
+                <div className="photo-upload">
+                    <label htmlFor="file-input" className="upload-label">
+                        <span>Upload Photo</span>
+                    </label>
                     <input
+                        id="file-input"
                         type="file"
                         accept="image/*"
-                        onChange={(e) => {
-                            setImage(e.target.files[0]);
-                        }}
+                        onChange={handleImageChange}
                     />
+                    {imagePreview && (
+                        <div className="image-preview">
+                            <img src={imagePreview} alt="Image Preview" />
+                        </div>
+                    )}
                 </div>
-                <button type="submit">Signup</button>
-                {error && <p>{error}</p>}
+                <button type="submit" className="signup-button">Create an account</button>
+                {error && <p className="error">{error}</p>}
             </form>
+            <p className="login-link">
+                Already have an account? <a href="/login">Log in</a>
+            </p>
         </div>
     );
 };
