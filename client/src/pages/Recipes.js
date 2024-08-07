@@ -6,6 +6,7 @@ import './Recipes.css'
 
 function Recipes() {
   const [recipes, setRecipes] = useState([]);
+  const [search, setSearch] = useState('');
   
   useEffect(() => {
     fetch ('http://127.0.0.1:5555/recipes')
@@ -13,12 +14,21 @@ function Recipes() {
      .then(data => setRecipes(data.recipes))
   }, []);
 
+  const handleSearchChange = (searchInput) => {
+      setSearch(searchInput)
+  };
+
+  const searchedRecipes = recipes.filter(
+      (recipe) => recipe.title.toLowerCase().includes(search.toLowerCase()) ||
+      recipe.ingredients.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <div className='recipe-container'>
       <img src={recipepage1} alt='recipepage' className='recipe-image'/>
       <h2 className='heading'>Recipes</h2>
-      <SearchRecipe />
-      <RecipeCard recipes={recipes}/>
+      <SearchRecipe search={search} onSearchChange={handleSearchChange}/>
+      <RecipeCard recipes={searchedRecipes}/>
     </div>
   )
 }
