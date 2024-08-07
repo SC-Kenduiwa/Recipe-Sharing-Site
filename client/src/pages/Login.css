@@ -5,32 +5,10 @@
 }
 
 .image-section {
-    position: relative;
     flex: 1;
     background-image: url('https://www.foodiesfeed.com/wp-content/uploads/2023/06/pouring-honey-on-pancakes.jpg');
     background-size: cover;
     background-position: center;
-}
-
-.image-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    text-align: center;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-}
-
-.image-text h1 {
-    font-size: 32px;
-    margin-bottom: 10px;
-}
-
-.image-text p {
-    font-size: 18px;
 }
 
 .login-section {

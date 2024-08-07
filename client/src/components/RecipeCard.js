@@ -1,5 +1,5 @@
 import React from 'react';
-import './RecipeCard.css';
+
 
 const RecipeCard = ({ image, title, description }) => (
     <div className="recipe-card">
