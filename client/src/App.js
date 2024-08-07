@@ -1,21 +1,27 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Header from './components/Header';
-import FeaturedRecipes from './components/FeaturedRecipes';
-import TopRecipe from './components/TopRecipe';
 import Footer from './components/Footer';
-import './App.css';
+import Home from './pages/Home';
+import About from './pages/About';
+import Recipes from './pages/Recipes';
+import Profile from './pages/Profile';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <Navbar />
-      <Header />
-      <FeaturedRecipes />
-      <TopRecipe />
-      <Footer />
-    </div>
+    <Router>
+      <div>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/recipes" element={<Recipes />} />
+          <Route path="/profile" element={<Profile />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
