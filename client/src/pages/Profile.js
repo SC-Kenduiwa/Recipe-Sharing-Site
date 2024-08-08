@@ -27,30 +27,55 @@ function UserProfile() {
 
   return (
     <div className="user-profile">
-      <h1>User Profile</h1>
-      <div className="user-info">
-        <img src={userData.profile_image_url} alt="Profile" />
-        <p><strong>Username:</strong> {userData.username}</p>
-        <p><strong>Email:</strong> {userData.email}</p>
-        <div>
-          <button>Update Profile</button>
+
+      <div className="user-profile-container">
+        <h1>User Profile</h1>
+        <div className="user-info">
+          <div className="user-image-container">
+            <img src={userData.profile_image_url} alt="Profile" className="user-image" />
+          </div>
+          <div className="user-details">
+            <p><strong>Username:</strong> {userData.username}</p>
+            <p><strong>Email:</strong> {userData.email}</p>
+            <div className="update-button-container">
+              <button className="update-profile-button">Update Profile</button>
+            </div>
+          </div>
         </div>
       </div>
+
       <div className="recipes">
-        <h2>Recipes</h2>
+        <h2>My Recipes</h2>
         {recipes.map(recipe => (
           <div key={recipe.id} className="recipe-item">
-            <h3>{recipe.title}</h3>
-            <p>{recipe.description}</p>
+            <div className="recipe-image-container">
+              <img src={recipe.recipe_image_url} alt={recipe.title} className="recipe-image" />
+            </div>
+            <div className="recipe-details">
+              <h3>{recipe.title}</h3>
+              <p>{recipe.description}</p>
+              <p><strong>Cooking Time:</strong> {recipe.cooking_time} minutes</p>
+              <p><strong>Difficulty:</strong> {recipe.difficulty_level}</p>
+              <p><strong>Country:</strong> {recipe.country}</p>
+            </div>
           </div>
         ))}
       </div>
+
       <div className="bookmarks">
         <h2>Bookmarks</h2>
         {bookmarks.map(bookmark => (
           <div key={bookmark.id} className="bookmark-item">
-            <h3>{bookmark.title}</h3>
-            <p>{bookmark.description}</p>
+            <div className="recipe-image-container">
+              <img src={bookmark.recipe_image_url} alt={bookmark.title} className="recipe-image" />
+            </div>
+            <div className="recipe-details">
+              <h3>{bookmark.title}</h3>
+              <p>{bookmark.description}</p>
+              <p><strong>Cooking Time:</strong> {bookmark.cooking_time} minutes</p>
+              <p><strong>Difficulty:</strong> {bookmark.difficulty_level}</p>
+              <p><strong>Country:</strong> {bookmark.country}</p>
+            </div>
           </div>
         ))}
       </div>
