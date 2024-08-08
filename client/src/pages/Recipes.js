@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import recipepage1 from '../assets/images/recipepage1.jpg'
 import RecipeCard from './RecipeCard'
 import SearchRecipe from './SearchRecipe'
 import Filter from './Filter'
@@ -47,7 +46,6 @@ function Recipes() {
 
   return (
     <div className='recipe-container'>
-      <img src={recipepage1} alt='recipepage' className='recipe-image' />
       <h2 className='heading'>Recipes</h2>
       <SearchRecipe search={search} onSearchChange={handleSearchChange} />
       <button className='filter-button' onClick={handleFilterToggle}>
