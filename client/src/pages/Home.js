@@ -1,27 +1,26 @@
 import React from 'react';
-import SearchBar from '../components/SearchBar';
-import RecipeCard from '../components/RecipeCard';
-import featuredImage from '../assets/images/featured-image.jpg';
-import friedSpaghetti from '../assets/images/fried-spaghetti.jpg';
-import meatDeluxePizza from '../assets/images/meat-deluxe-pizza.jpg';
-import grilledChicken from '../assets/images/grilled-chicken.jpg';
 import './Home.css';
+import FeaturedRecipes from '../components/FeaturedRecipes';
+import TopRecipe from '../components/TopRecipe';
 
-const Home = () => (
+const Home = () => {
+  return (
     <div className="home">
-        <div className="featured-image-container">
-            <img src={featuredImage} alt="Featured" className="featured-image" />
+      <section className="hero">
+        <div className="hero-content">
+          <h1>Delicious Food & Recipes For Your Loved ones</h1>
+          <p>Explore our wide range of recipes that will make your meals special.</p>
+          <button className="hero-button">Get Started</button>
         </div>
-        <SearchBar />
-        <div className="featured-recipes">
-            <h2>Featured Recipes</h2>
-            <div className="recipe-cards">
-                <RecipeCard image={friedSpaghetti} title="Fried Spaghetti" description="The ultimate hangover recipe" />
-                <RecipeCard image={meatDeluxePizza} title="Meat Deluxe Pizza" description="The ultimate hangover recipe" />
-                <RecipeCard image={grilledChicken} title="Grilled Chicken" description="The ultimate hangover recipe" />
-            </div>
+        <div className="hero-images">
+          <img src="client/src/assets/image1.jpg" alt="Delicious food" />
+          <img src="client/src/assets/image2.jpg" alt="Delicious food" />
         </div>
+      </section>
+      <FeaturedRecipes />
+      <TopRecipe />
     </div>
-);
+  );
+};
 
 export default Home;

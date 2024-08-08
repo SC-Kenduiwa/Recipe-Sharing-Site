@@ -1,0 +1,90 @@
+.login-container {
+    display: flex;
+    height: 100vh;
+    background: #FFFFFF;
+}
+
+.image-section {
+    position: relative;
+    flex: 1;
+    background-image: url('https://www.foodiesfeed.com/wp-content/uploads/2023/06/pouring-honey-on-pancakes.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.image-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+.image-text h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.image-text p {
+    font-size: 18px;
+}
+
+.login-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.login-form {
+    width: 100%;
+    max-width: 400px;
+}
+
+.login-form h2 {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #FF6600;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-form p {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #666;
+}
+
+.login-form a {
+    color: #FF6600;
+    text-decoration: none;
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+}

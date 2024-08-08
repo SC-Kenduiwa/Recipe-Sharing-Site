@@ -60,7 +60,7 @@ function Recipes() {
         <p className='no-results-message'>No recipes found matching your criteria.</p>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Recipes
+export default Recipes;
