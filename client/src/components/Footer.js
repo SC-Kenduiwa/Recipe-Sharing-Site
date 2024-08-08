@@ -7,14 +7,29 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <div className="footer-left">
+        <div className="footer-section">
           <h2>RecipeConnect</h2>
           <p>Your go-to platform for the best recipes.</p>
         </div>
-        <div className="footer-center">
-          <p>&copy; 2024 RecipeConnect. All rights reserved.</p>
+        <div className="footer-section">
+          <h4>About Us</h4>
+          <ul>
+            <li><a href="/our-story">Our Story</a></li>
+            <li><a href="/team">Team</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/policy">Privacy Policy</a></li>
+            <li><a href="/terms-of-service">Terms of Service</a></li>
+          </ul>
         </div>
-        <div className="footer-right">
+        <div className="footer-section">
+          <h4>Contact Us</h4>
+          <ul>
+            <li><a href="/contact">Contact Form</a></li>
+            <li><a href="/support">Support</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div className="footer-section social-media">
           <h4>Follow Us</h4>
           <div className="social-links">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
@@ -29,13 +44,8 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="footer-links">
-        <ul>
-          <li><a href="home">Home</a></li>
-          <li><a href="about">About Us</a></li>
-          <li><a href="#recipes">Our Recipes</a></li>
-          <li><a href="#profile">Profile</a></li>
-        </ul>
+      <div className="footer-bottom">
+        <p>&copy; 2024 RecipeConnect. All rights reserved.</p>
       </div>
     </footer>
   );

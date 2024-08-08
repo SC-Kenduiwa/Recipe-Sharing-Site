@@ -6,7 +6,7 @@ const TopRecipe = () => {
     <section className="top-recipe">
       <h2>Top Recipe</h2>
       <div className="recipe-details">
-        <img src="client/src/assets/top-recipe.jpg" alt="Top Recipe" />
+        <img src="/assets/pic1.jpg" alt="Top Recipe" />
         <div className="recipe-info">
           <h3>Recipe Name</h3>
           <p>Detailed description of the top recipe. This recipe stands out for its flavor and simplicity.</p>
