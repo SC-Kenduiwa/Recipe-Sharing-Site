@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Recipes from './pages/Recipes';
 import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/about" element={<About />} />
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/editprofile" element={<EditProfile />} />
         </Routes>
 
         <Footer />
