@@ -269,10 +269,10 @@ class RecipeResource(Resource):
 
 
 class UserProfile(Resource):
-    # @jwt_required()
+    @jwt_required()
     def get(self):
-        # current_user_id = get_jwt_identity()
-        user = User.query.get(7)
+        current_user_id = get_jwt_identity()
+        user = User.query.get(current_user_id)
         
         if not user:
             return {"error": "User not found"}, 404
@@ -337,6 +337,7 @@ class UserProfile(Resource):
     def format_recipe(self, recipe):
         return {
             'id': recipe.id,
+            'recipe_image_url': recipe.recipe_image_url,
             'title': recipe.title,
             'description': recipe.description,
             'cooking_time': recipe.cooking_time,

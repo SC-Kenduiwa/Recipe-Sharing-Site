@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './Profile.css';
 
@@ -6,14 +7,24 @@ function UserProfile() {
   const [userData, setUserData] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
-    fetchUserProfile();
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      navigate('/login');
+    }else{
+      setIsLoggedIn(true);
+      fetchUserProfile(token);
+    }
   }, []);
-
-  const fetchUserProfile = async () => {
+ 
+  const fetchUserProfile = async (token) => {
     try {
-      const response = await axios.get('http://localhost:5555/profile');
+      const response = await axios.get('/profile', {
+        headers: {'Authorization': `Bearer ${token}`}
+      });
       const { user, recipes, bookmarks } = response.data;
       setUserData(user);
       setRecipes(recipes);
@@ -23,6 +34,7 @@ function UserProfile() {
     }
   };
 
+  if (!isLoggedIn) return <div>Please log in to view your profile</div>;
   if (!userData) return <div>Data-Fetching failed</div>;
 
   return (
@@ -37,8 +49,8 @@ function UserProfile() {
           <div className="user-details">
             <p><strong>Username:</strong> {userData.username}</p>
             <p><strong>Email:</strong> {userData.email}</p>
-            <div className="update-button-container">
-              <button className="update-profile-button">Update Profile</button>
+            <div className="update-button-container">        
+              <button className="update-profile-button"><Link to="/editprofile">EditProfile</Link></button>
             </div>
           </div>
         </div>
