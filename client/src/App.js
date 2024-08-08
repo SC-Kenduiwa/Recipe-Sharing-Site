@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './pages/Home';
@@ -7,9 +8,11 @@ import About from './pages/About';
 import Recipes from './pages/Recipes';
 import Profile from './pages/Profile';
 
+
 const App = () => {
   return (
     <Router>
+
       <div>
         <Navbar />
         <Routes>
@@ -18,10 +21,13 @@ const App = () => {
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/profile" element={<Profile />} />
         </Routes>
+
         <Footer />
       </div>
     </Router>
   );
 };
 
+
 export default App;
+
