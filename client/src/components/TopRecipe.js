@@ -2,6 +2,15 @@ import React from 'react';
 import './TopRecipe.css';
 
 const TopRecipe = () => {
+<<<<<<< HEAD
+=======
+  const topRecipe = {
+    image: require('../assets/images/top-recipe.jpg'),
+    title: 'Home-Made Chocolate Chip Cookies',
+    description: 'Classic homemade chocolate chip cookies with a crispy edge and chewy center.'
+  };
+
+>>>>>>> Aden
   return (
     <section className="top-recipe">
       <h2>Top Recipe</h2>

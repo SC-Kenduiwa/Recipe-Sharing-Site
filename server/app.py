@@ -337,6 +337,7 @@ class UserProfile(Resource):
     def format_recipe(self, recipe):
         return {
             'id': recipe.id,
+            'recipe_image_url': recipe.recipe_image_url,
             'title': recipe.title,
             'description': recipe.description,
             'cooking_time': recipe.cooking_time,
