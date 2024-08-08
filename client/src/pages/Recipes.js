@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
+import recipepage1 from '../assets/images/recipepage1.jpg'
 import RecipeCard from './RecipeCard'
 import SearchRecipe from './SearchRecipe'
 import Filter from './Filter'
@@ -13,15 +14,40 @@ function Recipes() {
     ingredients: '',
     createdDateTime: ''
   });
+  const [pagination, setPagination] = useState({
+    page: 1,
+    perPage: 10,
+    totalPages: 1,
+  });
+
+  const fetchRecipes = useCallback(() => {
+    const params = new URLSearchParams({
+      search: search,
+      country: filters.country,
+      ingredients: filters.ingredients,
+      createdDateTime: filters.createdDateTime,
+      page: pagination.page,
+      perPage: pagination.perPage,
+    })
+
+    fetch(`http://127.0.0.1:5555/recipes?${params.toString()}`)
+      .then(response => response.json())
+      .then(data => {
+        setRecipes(data.recipes)
+        setPagination(prev => ({
+          ...prev,
+          totalPages: data.total_pages
+        }))
+      })
+  }, [search, filters, pagination.page, pagination.perPage]);
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5555/recipes')
-      .then(response => response.json())
-      .then(data => setRecipes(data.recipes))
-  }, []);
+    fetchRecipes();
+  }, [fetchRecipes]);
 
   const handleSearchChange = (searchInput) => {
     setSearch(searchInput)
+    setPagination(prev => ({ ...prev, page: 1 }));
   };
 
   const handleFilterToggle = () => {
@@ -30,7 +56,12 @@ function Recipes() {
 
   const handleFilterApply = (filterValues) => {
     setFilters(filterValues);
+    setPagination(prev => ({ ...prev, page: 1 }));
     setShowFilter(false);
+  };
+
+  const handlePageChange = (page) => {
+    setPagination(prev => ({ ...prev, page }));
   };
 
   const filteredAndSearchedRecipes = recipes.filter(recipe => {
@@ -51,9 +82,22 @@ function Recipes() {
       <button className='filter-button' onClick={handleFilterToggle}>
         {showFilter ? 'Hide Filters' : 'Show Filters'}
       </button>
-      {showFilter && <Filter onFilter={handleFilterApply}/>}
+      {showFilter && <Filter onFilter={handleFilterApply} />}
       {filteredAndSearchedRecipes.length > 0 ? (
-        <RecipeCard recipes={filteredAndSearchedRecipes} />
+        <>
+          <RecipeCard recipes={filteredAndSearchedRecipes} />
+          <div className="pagination-control">
+            <button className="pagination-button" onClick={() => handlePageChange(pagination.page - 1)}
+              disabled={pagination.page === 1}>
+              Previous
+            </button>
+            <span className='pagination-info'>Page {pagination.page} of {pagination.totalPages}</span>
+            <button className="pagination-button" onClick={() => handlePageChange(pagination.page + 1)}
+              disabled={pagination.page === pagination.totalPages}>
+              Next
+            </button>
+          </div>
+        </>
       ) : (
         <p className='no-results-message'>No recipes found matching your criteria.</p>
       )}
