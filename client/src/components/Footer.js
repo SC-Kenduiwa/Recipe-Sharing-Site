@@ -12,14 +12,7 @@ const Footer = () => {
           <p>Your go-to platform for the best recipes.</p>
         </div>
         <div className="footer-section">
-          <h4>About Us</h4>
-          <ul>
-            <li><a href="/our-story">Our Story</a></li>
-            <li><a href="/team">Team</a></li>
-            <li><a href="/careers">Careers</a></li>
-            <li><a href="/policy">Privacy Policy</a></li>
-            <li><a href="/terms-of-service">Terms of Service</a></li>
-          </ul>
+          
         </div>
         <div className="footer-section">
           <h4>Contact Us</h4>
