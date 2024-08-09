@@ -1,6 +1,5 @@
 import React from 'react'
 import './RecipeCard.css'
-import { Link } from 'react-router-dom';
 
 function RecipeCard({ recipes }) {
   return (
@@ -13,7 +12,7 @@ function RecipeCard({ recipes }) {
             <p className="card-description">{description}</p>
             <p className="card-country">{country}</p>
             <small>{cooking_time} mins</small>
-            <Link to={`/recipe/${id}`} className="btn btn-primary">View Recipe</Link>
+            <button className="btn btn-primary">View Recipe</button>
            
           </div>
         </div>

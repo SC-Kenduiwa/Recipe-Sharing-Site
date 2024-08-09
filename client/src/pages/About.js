@@ -1,6 +1,8 @@
 import React from 'react';
+
 import './About.css';
 import { useNavigate } from 'react-router-dom';
+
 
 const About = () => {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ const About = () => {
 
   return (
     <div>
+
       <section className="about-page">
         <div className="about-image">
           <img src="/assets/spread.png" alt="Food Spread" />
@@ -28,6 +31,7 @@ const About = () => {
           <button className="sign-up-button" onClick={handleSignUpClick}>SIGN UP</button>
         </div>
       </section>
+
     </div>
   );
 };
