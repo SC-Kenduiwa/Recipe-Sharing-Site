@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@mui/material';
 import './Signup.css';
 
 const Signup = () => {
@@ -9,8 +10,9 @@ const Signup = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [image, setImage] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
     const [error, setError] = useState('');
+    const [fileName, setFileName] = useState('Upload Photo');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleImageUpload = async (file) => {
@@ -38,9 +40,11 @@ const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
+        setLoading(true);
 
         if (password !== confirmPassword) {
             setError('Passwords do not match');
+            setLoading(false);
             return;
         }
 
@@ -49,45 +53,32 @@ const Signup = () => {
             profileImageUrl = await handleImageUpload(image);
             if (!profileImageUrl) {
                 setError('Image upload failed');
+                setLoading(false);
                 return;
             }
         }
 
         try {
-            const response = await axios.post('/users', {
+            await axios.post('/users', {
                 username,
                 email,
                 password,
                 profile_image_url: profileImageUrl
             });
 
-            const { access_token, refresh_token } = response.data;
-            localStorage.setItem('access_token', access_token);
-            localStorage.setItem('refresh_token', refresh_token);
-
             navigate('/login');
         } catch (err) {
             setError(err.response?.data?.error || 'Error signing up: ' + err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         setImage(file);
-
-        if (file) {
-            const imageURL = URL.createObjectURL(file);
-            setImagePreview(imageURL);
-        }
+        setFileName(file ? file.name : 'Upload Photo');
     };
-
-    useEffect(() => {
-        return () => {
-            if (imagePreview) {
-                URL.revokeObjectURL(imagePreview);
-            }
-        };
-    }, [imagePreview]);
 
     return (
         <div className="login-container">
@@ -131,7 +122,7 @@ const Signup = () => {
                         />
                         <div className="photo-upload">
                             <label htmlFor="file-input" className="upload-label">
-                                <span>Upload Photo</span>
+                                <span>{fileName}</span>
                             </label>
                             <input
                                 id="file-input"
@@ -139,13 +130,10 @@ const Signup = () => {
                                 accept="image/*"
                                 onChange={handleImageChange}
                             />
-                            {imagePreview && (
-                                <div className="image-preview">
-                                    <img src={imagePreview} alt="Image Preview" />
-                                </div>
-                            )}
                         </div>
-                        <button type="submit" className="signup-button">Create an account</button>
+                        <button type="submit" className="signup-button" disabled={loading}>
+                            {loading ? <CircularProgress size={24} color="inherit" /> : 'Create an account'}
+                        </button>
                         {error && <p className="error">{error}</p>}
                     </form>
                     <p className="login-link">

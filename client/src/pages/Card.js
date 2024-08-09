@@ -1,12 +1,12 @@
-import React from 'react'
-import './RecipeCard.css'
+import React from 'react';
+import './Card.css';
 import { Link } from 'react-router-dom';
 
 function RecipeCard({ recipes }) {
   return (
     <div className='recipelist-container'>
       {recipes.map(({ id, recipe_image_url, title, description, country, servings, cooking_time }) => (
-        <Link to={`/recipes/${id}`} className="card-link" key={id}>
+        <Link to={`/editrecipe/${id}`} className="card-link" key={id}>
           <div className="card">
             <img src={recipe_image_url} className="card-img-top" alt={title} />
             <div className="card-body">
@@ -20,7 +20,7 @@ function RecipeCard({ recipes }) {
         </Link>
       ))}
     </div>
-  )
+  );
 }
 
-export default RecipeCard
+export default RecipeCard;

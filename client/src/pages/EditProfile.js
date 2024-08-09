@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './EditProfile.css';
+import { CircularProgress } from '@mui/material';
+import './Signup.css';
 
 const EditProfile = () => {
     const [username, setUsername] = useState('');
@@ -10,6 +11,8 @@ const EditProfile = () => {
     const [currentImage, setCurrentImage] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [fileName, setFileName] = useState('Change profile photo');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,7 +39,7 @@ const EditProfile = () => {
     const handleImageUpload = async (file) => {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('upload_preset', 'recipe'); // Your signed upload preset
+        formData.append('upload_preset', 'recipe');
 
         try {
             const response = await axios.post(
@@ -50,7 +53,6 @@ const EditProfile = () => {
             );
             return response.data.secure_url;
         } catch (err) {
-            console.error('Error uploading image:', err);
             setError('Error uploading image: ' + (err.response?.data?.error?.message || err.message));
             return null;
         }
@@ -60,18 +62,13 @@ const EditProfile = () => {
         e.preventDefault();
         setError('');
         setSuccess('');
+        setLoading(true);
 
         let profileImageUrl = currentImage;
         if (image) {
-            try {
-                profileImageUrl = await handleImageUpload(image);
-                if (!profileImageUrl) {
-                    console.error('Image upload failed');
-                    return;
-                }
-            } catch (uploadError) {
-                console.error('Error in handleImageUpload:', uploadError);
-                setError('Error uploading image: ' + uploadError.message);
+            profileImageUrl = await handleImageUpload(image);
+            if (!profileImageUrl) {
+                setLoading(false);
                 return;
             }
         }
@@ -88,53 +85,68 @@ const EditProfile = () => {
             setSuccess('Profile updated successfully');
             setTimeout(() => navigate('/profile'), 2000);
         } catch (err) {
-            console.error('Error updating profile:', err);
             setError(err.response?.data?.error || 'Error updating profile: ' + err.message);
+        } finally {
+            setLoading(false);
         }
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setImage(file);
+        setFileName(file ? file.name : 'Change profile photo');
+    };
+
     return (
-        <div className="edit-profile-container">
-            <h2>Edit Profile</h2>
-            <form onSubmit={handleSubmit}>
-                <div className="input-group">
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
+        <div className="login-container">
+            <div className="image-section">
+                <div className="image-text">
+                    <h1>Update Your Profile</h1>
+                    <p>Keep your information up to date for a personalized cooking experience</p>
                 </div>
-                <div className="input-group">
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
+            </div>
+            <div className="login-section">
+                <div className="login-form">
+                    <h2>Edit Profile</h2>
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="text"
+                            placeholder="Username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                        <input
+                            type="email"
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                        <div className="photo-upload">
+                            <label htmlFor="file-input" className="upload-label">
+                                <span>{fileName}</span>
+                            </label>
+                            <input
+                                id="file-input"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                            />
+                        </div>
+                        {currentImage && (
+                            <div className="current-image">
+                                <img src={currentImage} alt="Current profile" />
+                            </div>
+                        )}
+                        <button type="submit" className="signup-button" disabled={loading}>
+                            {loading ? <CircularProgress size={24} color="inherit" /> : 'Update Profile'}
+                        </button>
+                        {error && <p className="error">{error}</p>}
+                        {success && <p className="success">{success}</p>}
+                    </form>
                 </div>
-                <div className="photo-upload">
-                    <label htmlFor="file-input" className="upload-label">
-                        <span>Change profile photo</span>
-                    </label>
-                    <input
-                        id="file-input"
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => setImage(e.target.files[0])}
-                    />
-                </div>
-                {currentImage && (
-                    <div className="current-image">
-                        <img src={currentImage} alt="Current profile" />
-                    </div>
-                )}
-                <button type="submit" className="update-button">Update Profile</button>
-                {error && <p className="error">{error}</p>}
-                {success && <p className="success">{success}</p>}
-            </form>
+            </div>
         </div>
     );
 };

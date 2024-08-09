@@ -38,17 +38,23 @@
   gap: 10px;
 }
 
-.login-btn, .signup-btn {
+.login-btn, .signup-btn, .logout-btn {
   padding: 5px 15px;
   border: none;
   border-radius: 20px;
   cursor: pointer;
   font-size: 16px;
+  text-decoration: none;
   transition: background-color 0.3s;
 }
 
 .login-btn {
   background-color: #ff6347;
+  color: white;
+}
+
+.logout-btn {
+  background-color: #e5533c;
   color: white;
 }
 
@@ -65,4 +71,47 @@
 .signup-btn:hover {
   background-color: #ff6347;
   color: white;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background-color: #333;
+  margin: 2px 0;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .navbar-links, .navbar-buttons {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .navbar-links.show, .navbar-buttons.show {
+    display: flex;
+  }
+
+  .navbar-links li {
+    margin: 10px 0;
+  }
+
+  .navbar-buttons {
+    top: calc(60px + 100%);
+  }
 }
