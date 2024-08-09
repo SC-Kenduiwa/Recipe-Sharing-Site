@@ -1,24 +1,32 @@
+.search-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+}
+
 .search-recipe {
     margin-top: 10px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
+    padding: 4px 8px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 13px;
+    border: 1px solid #ff6347;
+    height: 45px;
 }
 
-.search {
-    width: 100%;
-    max-width: 600px;
-    height: 45px;
+.search-recipe .search {
     border: none;
-    border-radius: 15px;
-    border: 1px solid #ff6347;
     padding: 0 15px;
     box-sizing: border-box;
+    outline: none;
+    flex: 1;
+    padding: 4px 8px;
 }
 
-.fa{
-    position: absolute;
+.search-recipe .fa {
+    margin-right: 8px;
 }

@@ -77,10 +77,12 @@ function Recipes() {
 
   return (
     <div className='recipe-container'>
+      <img src={recipepage1} alt='recipepage' className='recipe-image' />
       <h2 className='heading'>Recipes</h2>
       <SearchRecipe search={search} onSearchChange={handleSearchChange} />
       <button className='filter-button' onClick={handleFilterToggle}>
-        {showFilter ? 'Hide Filters' : 'Show Filters'}
+      <i className="fa fa-filter" aria-hidden="true"></i>   
+      {showFilter ? 'Hide Filters' : 'Show Filters'}
       </button>
       {showFilter && <Filter onFilter={handleFilterApply} />}
       {filteredAndSearchedRecipes.length > 0 ? (
