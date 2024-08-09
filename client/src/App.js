@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import RecipeDetails from './pages/RecipeDetails';
 
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/editprofile" element={<EditProfile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/recipe/:id" element={<RecipeDetails />} />
         </Routes>
 
         <Footer />
