@@ -12,7 +12,9 @@ function RecipeCard({ recipes }) {
             <p className="card-description">{description}</p>
             <p className="card-country">{country}</p>
             <small>{cooking_time} mins</small>
+
             <button className="btn btn-primary">View Recipe</button>
+
            
           </div>
         </div>

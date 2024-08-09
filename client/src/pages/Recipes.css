@@ -2,11 +2,38 @@
     background-color: #fff;
 }
 
+.image-container {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0; 
+    right: 0;
+    bottom: 40px;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1; 
+  }
+  
+  .heading, .search-recipe {
+    z-index: 2; 
+  }
+
 .heading {
-    padding: 20px;
     text-align: center;
-    font-size: 35px;
+    font-size: 32px;
     font-weight: 700;
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    border-radius: 4px;
 }
 
 .recipe-image {
@@ -14,11 +41,20 @@
     height: auto;
 }
 
+.recipe-highlight{
+    font-size: 32px;
+    font-weight: 700;
+    color: #ff6347;
+}
+
 .filter-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
-    background-color: #007bff;
+    background-color: #ff6347;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
@@ -27,7 +63,14 @@
 }
 
 .filter-button:hover {
-    background-color: #0056b3;
+    background-color: #f78504;
+}
+
+.filter-button .fa {
+    margin-right: 0px;
+    font-size: 18px;
+    line-height: 1;
+    padding-right: 10px;
 }
 
 .no-results-message {
