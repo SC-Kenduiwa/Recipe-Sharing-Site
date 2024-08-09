@@ -14,7 +14,6 @@
 
 .hero-content {
   max-width: 50%;
-  text-align: left; /* Align text to the left */
 }
 
 .hero-content h1 {
@@ -36,24 +35,8 @@
   border-radius: 5px;
 }
 
-.hero-images {
-  max-width: 50%;
-  display: flex;
-  justify-content: flex-end; /* Align images to the right */
-  gap: 10px; /* Add some space between images */
-}
-
 .hero-images img {
   max-width: 200px;
+  margin: 0 10px;
   border-radius: 10px;
-}
-
-.spread-section {
-  margin-bottom: 40px; 
-}
-
-.spread img {
-  width: 100%; 
-  height: auto; 
-  display: block; 
 }

@@ -7,10 +7,11 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <div className="footer-section">
+        <div className="footer-text">
           <h2>RecipeConnect</h2>
           <p>Your go-to platform for the best recipes.</p>
         </div>
+
         <div className="footer-section">
           
         </div>
@@ -35,6 +36,7 @@ const Footer = () => {
               <FontAwesomeIcon icon={faInstagram} />
             </a>
           </div>
+
         </div>
       </div>
       <div className="footer-bottom">
