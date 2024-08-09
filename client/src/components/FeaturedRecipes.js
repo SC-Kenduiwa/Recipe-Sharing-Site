@@ -2,8 +2,6 @@ import React from 'react';
 import './FeaturedRecipes.css';
 
 const FeaturedRecipes = () => {
-<<<<<<< HEAD
-=======
   const recipes = [
     {
       id: 1,
@@ -25,7 +23,6 @@ const FeaturedRecipes = () => {
     }
   ];
 
->>>>>>> Aden
   return (
     <section className="featured-recipes">
       <h2>Featured Recipes</h2>
