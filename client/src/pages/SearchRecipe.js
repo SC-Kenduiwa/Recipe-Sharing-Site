@@ -12,7 +12,7 @@ function SearchRecipe({ search, onSearchChange }) {
                     type="text"
                     value={search}
                     onChange={(e) => onSearchChange(e.target.value)}
-                    placeholder="Search recipe..."
+                    placeholder="Search recipe by name, ingredient..."
                 />
             </div>
         </div>
