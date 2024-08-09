@@ -77,12 +77,15 @@ function Recipes() {
 
   return (
     <div className='recipe-container'>
-      <img src={recipepage1} alt='recipepage' className='recipe-image' />
-      <h2 className='heading'>Recipes</h2>
-      <SearchRecipe search={search} onSearchChange={handleSearchChange} />
+      <div className='image-container'>
+        <img src={recipepage1} alt='recipepage' className='recipe-image' />
+        <h2 className='heading'>Fuel your body & soul - find <span className="recipe-highlight">RECIPES </span>that taste <span className="recipe-highlight">AMAZING!</span>
+        </h2>
+        <SearchRecipe search={search} onSearchChange={handleSearchChange} />
+      </div>
       <button className='filter-button' onClick={handleFilterToggle}>
-      <i className="fa fa-filter" aria-hidden="true"></i>   
-      {showFilter ? 'Hide Filters' : 'Show Filters'}
+        <i className="fa fa-filter" aria-hidden="true"></i>
+        {showFilter ? 'Hide Filters' : 'Show Filters'}
       </button>
       {showFilter && <Filter onFilter={handleFilterApply} />}
       {filteredAndSearchedRecipes.length > 0 ? (

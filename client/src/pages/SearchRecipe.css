@@ -6,6 +6,10 @@
 }
 
 .search-recipe {
+    position: absolute;
+    bottom: 65px;
+    left: 50%;
+    transform: translateX(-50%);
     margin-top: 10px;
     display: flex;
     align-items: center;
@@ -13,9 +17,10 @@
     padding: 4px 8px;
     width: 100%;
     max-width: 500px;
-    border-radius: 13px;
-    border: 1px solid #ff6347;
-    height: 45px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    height: 43px;
+    background-color: #fff;
 }
 
 .search-recipe .search {
@@ -29,4 +34,5 @@
 
 .search-recipe .fa {
     margin-right: 8px;
+    color: #ff6347;
 }
