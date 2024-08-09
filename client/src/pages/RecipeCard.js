@@ -1,6 +1,8 @@
 import React from 'react'
 import './RecipeCard.css'
+
 import { Link } from 'react-router-dom';
+
 
 function RecipeCard({ recipes }) {
   return (
@@ -13,11 +15,13 @@ function RecipeCard({ recipes }) {
             <p className="card-country"><i class="fa fa-globe" aria-hidden="true"></i>
             {country}</p>
             <p className="card-description">{description}</p>
+
             
             <small>{servings} servings</small>
             <small><i class="fa fa-clock-o" aria-hidden="true"></i>
              {cooking_time} mins</small>
             <Link to={`/recipes/${id}`} className="btn btn-primary">View Recipe</Link>
+
           </div>
         </div>
       ))}
