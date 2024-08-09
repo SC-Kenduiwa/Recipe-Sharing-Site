@@ -13,16 +13,17 @@
     content: '';
     position: absolute;
     top: 0;
-    left: 0; 
+    left: 0;
     right: 0;
     bottom: 40px;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 1; 
-  }
-  
-  .heading, .search-recipe {
-    z-index: 2; 
-  }
+    z-index: 1;
+}
+
+.heading,
+.search-recipe {
+    z-index: 2;
+}
 
 .heading {
     text-align: center;
@@ -41,7 +42,7 @@
     height: auto;
 }
 
-.recipe-highlight{
+.recipe-highlight {
     font-size: 32px;
     font-weight: 700;
     color: #ff6347;
@@ -74,8 +75,37 @@
 }
 
 .no-results-message {
-    color: #ff0000; 
+    color: #ff0000;
     font-size: 1.2em;
     margin-top: 20px;
+}
+
+.pagination-control{
+    display: flex;
+    justify-content: center;
+}
+
+.pagination-info{
+    margin-top: 5px;
+    font-size: 1.2em;
+}
+
+.pagination-button{
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-button:hover {
+    background-color: #f78504;
+}
+
+.pagination-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
   }
-  
