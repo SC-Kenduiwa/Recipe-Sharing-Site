@@ -1,8 +1,7 @@
-/* General layout */
 .user-profile {
   display: flex;
   background-color: #f9f9f9; /* Light background */
-  height: 100vh;
+  height: auto;
   margin: 0;
 }
 
@@ -79,13 +78,18 @@
   flex: 1;
 }
 
-.update-profile-button {
+.button-container {
+  display: flex;
+  gap: 10px; 
   margin-top: 10px;
+}
+
+.update-profile-button {
   padding: 8px 12px;
-  background-color: #6b705c; /* Button color similar to the image */
+  background-color: #ff6347;
   color: #fff;
   border: none;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -96,31 +100,15 @@
 }
 
 .update-profile-button:hover {
-  background-color: #55664a; /* Darker shade on hover */
+  background-color: #55664a; 
 }
 
-.logout-button {
-  background-color: #bc4749;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 20px;
-}
-
-.logout-button:hover {
-  background-color: #a93d3f;
-}
-
-/* Recipes and Bookmarks styling */
 .recipes, .bookmarks {
-  margin-top: 40px; /* Increased spacing between sections and sidebar */
+  margin-top: 40px;
 }
 
 .recipes h2, .bookmarks h2 {
-  margin-bottom: 20px; /* Space between section title and items */
+  margin-bottom: 20px;
   font-size: 1.5em;
   color: #333;
 }
@@ -131,7 +119,7 @@
   padding: 10px;
   border: 1px solid #d3d3d3;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow like the image */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   background-color: #fff;
 }
 
@@ -140,8 +128,8 @@
 }
 
 .recipe-image-container img, .bookmark-item img {
-  border-radius: 10px; /* Rounded corners like in the image */
-  width: 150px; /* Adjust the image size */
+  border-radius: 10px; 
+  width: 150px; 
   height: 100px;
   object-fit: cover;
 }

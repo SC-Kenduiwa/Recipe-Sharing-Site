@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import RecipeCard from './RecipeCard';  
+import RecipeCard from './RecipeCard';
 import './Profile.css';
+import Card from './Card'
 
 function UserProfile() {
   const [userData, setUserData] = useState(null);
@@ -21,8 +22,8 @@ function UserProfile() {
     else{
       fetchUserProfile(token);
     }
-  }, []);
- 
+  }, [navigate]);
+
   const fetchUserProfile = async (token) => {
     try {
       setIsLoading(true);
@@ -41,11 +42,6 @@ function UserProfile() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    navigate('/login');
-  };
-
   const renderContent = () => {
     if (activeTab === 'profile') {
       return (
@@ -55,32 +51,37 @@ function UserProfile() {
               <img src={userData.profile_image_url} alt="Profile" className="user-image" />
             </div>
             <div className="user-details">
-              <p><strong>Username:</strong> {userData.username}</p>
-              <p><strong>Email:</strong> {userData.email}</p>
-              <button className="update-profile-button">
-                <Link to="/editprofile">Edit Profile</Link>
-              </button>
+              <p><strong>Hello, </strong> {userData.username}</p>
+              <p><strong>Your email is:</strong> {userData.email}</p>
+              <div className="button-container">
+                <button className="update-profile-button">
+                  <Link to="/editprofile">Edit Profile</Link>
+                </button>
+                <button className='update-profile-button'>
+                  <Link to="/newrecipe">Add New Recipe</Link>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       );
-    } 
+    }
+
     else if (activeTab === 'recipes') {
       return (
         <div className="recipes">
-          <h2>My Recipes</h2>
           {recipes.length > 0 ? (
-            <RecipeCard recipes={recipes} />
+            <Card recipes={recipes} />
           ) : (
             <p>No recipes added yet.</p>
           )}
         </div>
       );
-    } 
+    }
+
     else if (activeTab === 'bookmarks') {
       return (
         <div className="bookmarks">
-          <h2>Bookmarks</h2>
           {bookmarks.length > 0 ? (
             <RecipeCard recipes={bookmarks} />
           ) : (
@@ -98,12 +99,11 @@ function UserProfile() {
   return (
     <div className="user-profile">
       <div className="sidebar">
-        <h3>My Profile</h3>
+        <h3>Manage Your Account</h3>
         <ul>
           <li className={activeTab === 'profile' ? 'active' : ''} onClick={() => setActiveTab('profile')}>Profile</li>
           <li className={activeTab === 'recipes' ? 'active' : ''} onClick={() => setActiveTab('recipes')}>My Recipes</li>
           <li className={activeTab === 'bookmarks' ? 'active' : ''} onClick={() => setActiveTab('bookmarks')}>Bookmarks</li>
-          <li><button className="logout-button" onClick={handleLogout}>Logout</button></li>
         </ul>
       </div>
       <div className="content">

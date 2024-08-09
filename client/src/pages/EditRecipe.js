@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import './NewRecipe.css';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const EditRecipe = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const EditRecipe = () => {
   const [imageLabel, setImageLabel] = useState('Change photo');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -126,27 +128,37 @@ const EditRecipe = () => {
     }
   };
 
-  const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this recipe?')) {
-      try {
-        const accessToken = localStorage.getItem('access_token');
-        await axios.delete(`/recipes/${id}`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        navigate('/recipes');
-      } catch (err) {
-        console.error('Recipe deletion failed:', err);
-        setError(err.response?.data?.error || 'Failed to delete recipe: ' + err.message);
-      }
+  const handleDeleteClick = () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    try {
+      const accessToken = localStorage.getItem('access_token');
+      await axios.delete(`/recipes/${id}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      navigate('/recipes');
+    } catch (err) {
+      console.error('Recipe deletion failed:', err);
+      setError(err.response?.data?.error || 'Failed to delete recipe: ' + err.message);
     }
+    setShowDeleteConfirmation(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteConfirmation(false);
   };
 
   if (loading) return <div>Loading...</div>;
 
   return (
     <div className="super-obnoxious-recipe-container">
+      <button onClick={() => navigate(-1)} className="back-button">
+        <FaArrowLeft /> Back
+      </button>
       <h2 className="super-obnoxious-title">Edit Recipe</h2>
       <form className="super-obnoxious-form" onSubmit={handleSubmit}>
         <div className="super-obnoxious-photo-upload">
@@ -271,7 +283,7 @@ const EditRecipe = () => {
           <button
             type="button"
             className="super-obnoxious-cancel-button"
-            onClick={handleDelete}
+            onClick={handleDeleteClick}
           >
             Delete Recipe
           </button>
@@ -281,6 +293,19 @@ const EditRecipe = () => {
         </div>
       </form>
       {error && <p className="super-obnoxious-error-message">{error}</p>}
+
+      {showDeleteConfirmation && (
+        <div className="delete-confirmation-overlay">
+          <div className="delete-confirmation-modal">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete this recipe?</p>
+            <div className="delete-confirmation-actions">
+              <button onClick={handleDeleteConfirm} className="confirm-delete-btn">Yes, Delete</button>
+              <button onClick={handleDeleteCancel} className="cancel-delete-btn">Cancel</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
