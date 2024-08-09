@@ -7,19 +7,13 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <div className="footer-section">
+        <div className="footer-text">
           <h2>RecipeConnect</h2>
           <p>Your go-to platform for the best recipes.</p>
         </div>
+
         <div className="footer-section">
-          <h4>About Us</h4>
-          <ul>
-            <li><a href="/our-story">Our Story</a></li>
-            <li><a href="/team">Team</a></li>
-            <li><a href="/careers">Careers</a></li>
-            <li><a href="/policy">Privacy Policy</a></li>
-            <li><a href="/terms-of-service">Terms of Service</a></li>
-          </ul>
+          
         </div>
         <div className="footer-section">
           <h4>Contact Us</h4>
@@ -42,6 +36,7 @@ const Footer = () => {
               <FontAwesomeIcon icon={faInstagram} />
             </a>
           </div>
+
         </div>
       </div>
       <div className="footer-bottom">

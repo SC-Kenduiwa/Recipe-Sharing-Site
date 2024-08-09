@@ -1,0 +1,38 @@
+.search-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.search-recipe {
+    position: absolute;
+    bottom: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    height: 43px;
+    background-color: #fff;
+}
+
+.search-recipe .search {
+    border: none;
+    padding: 0 15px;
+    box-sizing: border-box;
+    outline: none;
+    flex: 1;
+    padding: 4px 8px;
+}
+
+.search-recipe .fa {
+    margin-right: 8px;
+    color: #ff6347;
+}
