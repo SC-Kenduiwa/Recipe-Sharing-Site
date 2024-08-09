@@ -50,7 +50,9 @@ function UserProfile() {
             <p><strong>Username:</strong> {userData.username}</p>
             <p><strong>Email:</strong> {userData.email}</p>
             <div className="update-button-container">        
-              <button className="update-profile-button"><Link to="/editprofile">EditProfile</Link></button>
+              <button className="update-profile-button">
+                <Link to="/editprofile">EditProfile</Link>
+              </button>
             </div>
           </div>
         </div>

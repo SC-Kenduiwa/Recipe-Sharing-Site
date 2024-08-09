@@ -6,8 +6,8 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
 import Recipes from './pages/Recipes';
-import RecipeDetails from './pages/RecipeDetails';
 import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 
 
 const App = () => {
@@ -20,8 +20,8 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/recipes" element={<Recipes />} />
-          <Route path="/recipes/:id" element={<RecipeDetails/>} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/editprofile" element={<EditProfile />} />
         </Routes>
 
         <Footer />

@@ -7,6 +7,7 @@ import './Navbar.css';
 import Logo from './Logo';
 
 const Navbar = () => {
+  
 
   return (
     <nav className="navbar">
