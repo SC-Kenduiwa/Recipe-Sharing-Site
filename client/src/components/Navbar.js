@@ -1,37 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import './Navbar.css';
 import Logo from './Logo';
 import { useAuth } from './AuthContext';
 
 const Navbar = () => {
-  const { isLoggedIn, setIsLoggedIn } = useAuth();
-  const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Check initial size
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('refresh_token');
-    setIsLoggedIn(false);
-    navigate('/login');
-  };
-
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
-
   return (
     <nav className="navbar">
       <div className="navbar-logo">
