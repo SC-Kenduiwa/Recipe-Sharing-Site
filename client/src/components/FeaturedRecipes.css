@@ -30,9 +30,14 @@
 
 .recipe-info {
   padding: 20px;
-  text-align: center;
+  text-align: left; 
 }
 
 .recipe-info h3 {
   margin-bottom: 10px;
+}
+
+.recipe-info p {
+  margin: 0;
+  text-align: left; 
 }

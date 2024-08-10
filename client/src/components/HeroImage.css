@@ -1,0 +1,10 @@
+/* HeroImage.css */
+.hero-image-container {
+  width: 100vw; /* Full viewport width */
+  overflow: hidden; /* Prevents overflow */
+}
+
+.hero-image {
+  width: 100%; /* Full width of its container */
+  height: auto; /* Maintain aspect ratio */
+}

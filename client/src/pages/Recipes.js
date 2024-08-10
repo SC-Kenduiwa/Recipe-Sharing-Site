@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import RecipeCardd from './RecipeCardd'
-import SearchBar from '../components/SearchBar';
-import './Recipes.css';
-import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
+import React, { useEffect, useState, useCallback } from 'react'
+import recipepage1 from '../assets/recipepage1.jpg';
+import RecipeCard from './RecipeCard'
+import SearchRecipe from './SearchRecipe'
+import Filter from './Filter'
+import './Recipes.css'
 
-const RecipeList = () => {
-  const navigate = useNavigate();
+function Recipes() {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

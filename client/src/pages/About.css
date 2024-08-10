@@ -1,0 +1,67 @@
+.about-page {
+  background-color: #fff;
+  padding: 40px;
+  margin-bottom: 40px;
+}
+
+.about-image img {
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  object-fit: cover;
+  margin: 0 auto;
+  display: block;
+}
+
+.about-container {
+  text-align: center;
+  color: #333;
+  background-color: #fff;
+  padding: 40px;
+  max-width: 800px;
+  margin: 40px auto;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.about-content {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.about-content h2 {
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.about-content p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.sign-up-button {
+  background-color: #ff6347;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1.2em;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: block;
+  margin: 20px auto;
+  text-decoration: none; /* Removes underline from link */
+  outline: none; /* Removes focus outline */
+}
+
+.sign-up-button:hover {
+  background-color: #e5533c;
+}
+
+/* Make the Link invisible */
+.about-page a {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit color from parent */
+}

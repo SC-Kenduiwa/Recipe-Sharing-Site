@@ -10,9 +10,9 @@ const Hero = () => {
         <button className="hero-button">Get Started</button>
       </div>
       <div className="hero-images">
-        <img src="path_to_hero_image_1" alt="Delicious food" />
-        <img src="path_to_hero_image_2" alt="Delicious food" />
-        <img src="path_to_hero_image_2" alt="Delicious food" />
+        <img src="/assets/picture1.jpeg" alt="Delicious food" />
+        <img src="/assets/picture2.jpg" alt="Delicious food" />
+        <img src="/assets/picture3.jpg" alt="Delicious food" />
       </div>
     </section>
   );
