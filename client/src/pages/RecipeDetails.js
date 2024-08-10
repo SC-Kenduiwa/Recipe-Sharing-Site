@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaShare, FaBookmark, FaStar, FaArrowLeft, FaFacebookF, FaTwitter, FaEnvelope, FaLink, FaWhatsapp } from 'react-icons/fa';
+import { FaShare, FaBookmark, FaStar, FaChartLine, FaUtensils, FaArrowLeft, FaFacebookF, FaTwitter, FaEnvelope, FaLink, FaWhatsapp, FaClock, FaGlobe  } from 'react-icons/fa';
 import './RecipeDetails.css';
 
 const ShareButton = ({ recipe }) => {
@@ -199,9 +199,11 @@ const RecipeDetails = () => {
       <p className="recipe-description">{recipe.description}</p>
 
       <div className="recipe-infoo">
-        <p>Servings: {recipe.servings}</p>
-        <p>Cook Time: {recipe.cooking_time} Minutes</p>
-        <p>Difficulty: {recipe.difficulty_level}</p>
+        <p>Servings: <FaUtensils /> {recipe.servings}</p>
+        <p>Cook Time: <FaClock />{recipe.cooking_time} Minutes</p>
+        <p>Difficulty: <FaChartLine /> {recipe.difficulty_level}</p>
+        <p>Country: <FaGlobe />{recipe.country}</p>
+        
       </div>
 
       <div className="recipe-content">

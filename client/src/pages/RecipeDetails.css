@@ -29,7 +29,17 @@
   margin-bottom: 10px;
   
 }
+h1{
+  font-weight: bold;
+}
 
+ h2{
+  font-weight: bold;
+}
+
+h3{
+  font-weight: bold;
+}
 .recipe-rating {
   display: flex;
   align-items: center;
