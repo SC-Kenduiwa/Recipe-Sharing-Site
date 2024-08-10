@@ -31,14 +31,17 @@
 }
 h1{
   font-weight: bold;
+  color: #ff6347;
 }
 
  h2{
   font-weight: bold;
+  color: #ff6347;
 }
 
 h3{
   font-weight: bold;
+  color: #ff6347;
 }
 .recipe-rating {
   display: flex;

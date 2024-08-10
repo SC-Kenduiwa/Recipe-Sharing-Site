@@ -64,6 +64,13 @@
 .logout-btn {
   background-color: #e5533c;
   color: white;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background-color 0.3s;
 }
 
 .signup-btn {
