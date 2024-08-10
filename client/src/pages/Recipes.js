@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import recipepage1 from '../assets/images/recipepage1.jpg'
+import recipepage1 from '../assets/recipepage1.jpg';
 import RecipeCard from './RecipeCard'
 import SearchRecipe from './SearchRecipe'
 import Filter from './Filter'

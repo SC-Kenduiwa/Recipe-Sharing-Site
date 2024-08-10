@@ -12,6 +12,10 @@
   align-items: center;
 }
 
+.navbar-logo a {
+  text-decoration: none;
+}
+
 .navbar-links {
   list-style: none;
   display: flex;
@@ -23,7 +27,7 @@
 }
 
 .navbar-links a {
-  text-decoration: none;
+  text-decoration: none; 
   color: #333;
   font-size: 16px;
   transition: color 0.3s;
@@ -36,6 +40,10 @@
 .navbar-buttons {
   display: flex;
   gap: 10px;
+}
+
+.navbar-buttons a {
+  text-decoration: none; 
 }
 
 .login-btn, .signup-btn {

@@ -1,14 +1,9 @@
 import React from 'react';
-
 import { Link } from 'react-router-dom';
-
-
 import './Navbar.css';
 import Logo from './Logo';
 
 const Navbar = () => {
-  
-
   return (
     <nav className="navbar">
       <div className="navbar-logo">
