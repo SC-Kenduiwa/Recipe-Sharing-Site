@@ -7,7 +7,7 @@ const TopRecipe = () => {
       <h2>Top Recipe</h2>
       <div className="recipe-details">
 
-        <img src="/assets/pic1.jpg" alt="Top Recipe" className="recipe-image" />
+        <img src="https://img.sndimg.com/food/image/upload/v1/img/recipes/61/79/0/rKwCBqiqSwu72Lk8mzwc_loaded%20supreme%20nachos%20SITE-2.jpg" alt="Top Recipe" className="recipe-image" />
 
         <div className="recipe-info">
           <h3>Loaded Nachos and Creamy Chicken</h3>

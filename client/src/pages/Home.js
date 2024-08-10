@@ -13,8 +13,8 @@ const Home = () => {
           <button className="hero-button">Get Started</button>
         </div>
         <div className="hero-images">
-          <img src="client/src/assets/image1.jpg" alt="Delicious food" />
-          <img src="client/src/assets/image2.jpg" alt="Delicious food" />
+          <img src="https://www.foodiesfeed.com/wp-content/uploads/2023/06/pouring-honey-on-pancakes.jpg" alt="Delicious food" />
+          <img src="https://www.foodiesfeed.com/wp-content/uploads/2023/04/strawberry-milk-splash.jpg" alt="Delicious food" />
         </div>
       </section>
       <FeaturedRecipes />

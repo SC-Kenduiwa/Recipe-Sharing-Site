@@ -8,7 +8,7 @@ const FeaturedRecipes = () => {
       <div className="recipes-container">
         <div className="recipe-card">
 
-          <img src="/assets/recipe1.jpg" alt="Sponge Cake" />
+          <img src="https://www.foodiesfeed.com/wp-content/uploads/2023/05/freshly-prepared-beef-steak-with-vegetables.jpg" alt="Sponge Cake" />
 
           <div className="recipe-info">
             <h3>Sponge Cake</h3>
@@ -17,7 +17,7 @@ const FeaturedRecipes = () => {
         </div>
         <div className="recipe-card">
 
-          <img src="/assets/recipe2.jpg" alt="Chocolate Cupcake" />
+          <img src="https://www.cupcakefoodies.com/images/15482387856x750.jpg" alt="Chocolate Cupcake" />
 
           <div className="recipe-info">
             <h3>Chocolate Cupcake</h3>

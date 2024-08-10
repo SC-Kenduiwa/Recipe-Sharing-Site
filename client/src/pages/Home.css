@@ -36,7 +36,8 @@
 }
 
 .hero-images img {
-  max-width: 200px;
+  width: 200px;
+  height: 200px;
   margin: 0 10px;
   border-radius: 10px;
 }
