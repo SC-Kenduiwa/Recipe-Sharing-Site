@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import './NewRecipe.css';
 import { FaArrowLeft } from 'react-icons/fa';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const EditRecipe = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const EditRecipe = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -94,11 +96,15 @@ const EditRecipe = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSubmitting(true);
 
     let recipeImageUrl = null;
     if (image) {
       recipeImageUrl = await handleImageUpload(image);
-      if (!recipeImageUrl) return;
+      if (!recipeImageUrl) {
+        setSubmitting(false);
+        return;
+      }
     }
 
     const recipeData = {
@@ -120,11 +126,13 @@ const EditRecipe = () => {
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'application/json',
         },
-      });
-      navigate('/recipes');
+      })
+      navigate('/profile');
     } catch (err) {
       console.error('Recipe update failed:', err);
       setError(err.response?.data?.error || 'Failed to update recipe: ' + err.message);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -133,6 +141,7 @@ const EditRecipe = () => {
   };
 
   const handleDeleteConfirm = async () => {
+    setSubmitting(true);
     try {
       const accessToken = localStorage.getItem('access_token');
       await axios.delete(`/recipes/${id}`, {
@@ -140,17 +149,21 @@ const EditRecipe = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      navigate('/recipes');
+      navigate('/profile');
     } catch (err) {
       console.error('Recipe deletion failed:', err);
       setError(err.response?.data?.error || 'Failed to delete recipe: ' + err.message);
+    } finally {
+      setSubmitting(false);
+      setShowDeleteConfirmation(false);
     }
-    setShowDeleteConfirmation(false);
   };
 
   const handleDeleteCancel = () => {
     setShowDeleteConfirmation(false);
   };
+
+
 
   if (loading) return <div>Loading...</div>;
 
@@ -284,11 +297,12 @@ const EditRecipe = () => {
             type="button"
             className="super-obnoxious-cancel-button"
             onClick={handleDeleteClick}
+            disabled={submitting}
           >
             Delete Recipe
           </button>
-          <button type="submit" className="super-obnoxious-submit-button">
-            Update Recipe
+          <button type="submit" className="super-obnoxious-submit-button" disabled={submitting}>
+            {submitting ? <CircularProgress size={24} color="inherit" /> : 'Update Recipe'}
           </button>
         </div>
       </form>
@@ -300,8 +314,12 @@ const EditRecipe = () => {
             <h3>Confirm Deletion</h3>
             <p>Are you sure you want to delete this recipe?</p>
             <div className="delete-confirmation-actions">
-              <button onClick={handleDeleteConfirm} className="confirm-delete-btn">Yes, Delete</button>
-              <button onClick={handleDeleteCancel} className="cancel-delete-btn">Cancel</button>
+              <button onClick={handleDeleteConfirm} className="confirm-delete-btn" disabled={submitting}>
+                {submitting ? <CircularProgress size={24} color="inherit" /> : 'Yes, Delete'}
+              </button>
+              <button onClick={handleDeleteCancel} className="cancel-delete-btn" disabled={submitting}>
+                Cancel
+              </button>
             </div>
           </div>
         </div>

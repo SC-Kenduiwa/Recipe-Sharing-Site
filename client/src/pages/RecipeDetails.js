@@ -200,9 +200,9 @@ const RecipeDetails = () => {
 
       <div className="recipe-infoo">
         <p>Servings: <FaUtensils /> {recipe.servings}</p>
-        <p>Cook Time: <FaClock />{recipe.cooking_time} Minutes</p>
+        <p>Cook Time: <FaClock /> {recipe.cooking_time} Minutes</p>
         <p>Difficulty: <FaChartLine /> {recipe.difficulty_level}</p>
-        <p>Country: <FaGlobe />{recipe.country}</p>
+        <p>Country: <FaGlobe /> {recipe.country}</p>
         
       </div>
 
