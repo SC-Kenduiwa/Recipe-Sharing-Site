@@ -27,7 +27,7 @@
 }
 
 .navbar-links a {
-  text-decoration: none; 
+  text-decoration: none;
   color: #333;
   font-size: 16px;
   transition: color 0.3s;
@@ -37,13 +37,18 @@
   color: #ff6347;
 }
 
+.navbar-links a.active {
+  color: #ff6347;
+  font-weight: bold;
+}
+
 .navbar-buttons {
   display: flex;
   gap: 10px;
 }
 
 .navbar-buttons a {
-  text-decoration: none; 
+  text-decoration: none;
 }
 
 .login-btn, .signup-btn {
@@ -53,7 +58,7 @@
   cursor: pointer;
   font-size: 16px;
   text-decoration: none;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .login-btn {
@@ -79,11 +84,54 @@
   border: 1px solid #ff6347;
 }
 
-.login-btn:hover {
+.login-btn:hover, .login-btn.active {
   background-color: #e5533c;
 }
 
-.signup-btn:hover {
+.signup-btn:hover, .signup-btn.active {
   background-color: #ff6347;
   color: white;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+
+  .hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    margin-bottom: 4px;
+  }
+
+  .navbar-links, .navbar-buttons {
+    display: none;
+    width: 100%;
+  }
+
+  .navbar-links.show, .navbar-buttons.show {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-links li {
+    margin: 10px 0;
+  }
+
+  .navbar-buttons {
+    margin-top: 10px;
+  }
 }

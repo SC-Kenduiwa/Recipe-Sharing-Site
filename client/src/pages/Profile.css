@@ -76,6 +76,7 @@
 
 .user-details {
   flex: 1;
+  height: 400px;
 }
 
 .button-container {

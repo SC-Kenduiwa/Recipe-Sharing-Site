@@ -24,7 +24,9 @@ const About = () => {
           Whether you're a seasoned chef or a kitchen novice, there's a place for you here. Explore our diverse collection of recipes, from quick and easy weeknight meals to elaborate gourmet creations. Find inspiration for your next dinner party, or simply satisfy your cravings with comfort food classics.
         </p>
         <p>Join the community today</p>
-        <button className="sign-up-button" onClick={handleSignUpClick}>SIGN UP</button>
+        <div className="button-wrapper">
+          <button className="sign-up-button" onClick={handleSignUpClick}>SIGN UP</button>
+        </div>
       </div>
     </div>
   );
