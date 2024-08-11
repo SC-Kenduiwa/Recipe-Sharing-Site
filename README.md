@@ -49,3 +49,63 @@ Full Stack Development: React (Frontend) & Flask Python (Backend)
 3. Wireframes: Figma (Mobile-friendly)
 4. Testing Framework: Jest & Minitests
 5. Frontend: ReactJS & Redux Toolkit (State management)
+
+
+## Setup and Installation
+Prerequisites
+Ensure that the following software is installed on your system:
+
+1.Node.js (with npm)
+2.Python
+3.Flask
+4.SQLAlchemy
+5.A Cloudinary account (for managing profile images)
+
+## Backend Setup
+Clone the Repository:
+git clone https://github.com/yourusername/recipe-sharing-platform.git
+cd recipe-sharing-platform/server
+
+## Create and Activate a Virtual Environment:
+python -m venv venv
+source venv/bin/activate 
+
+## Configure Environment Variables:
+Set up environment variables required by Flask and Cloudinary.
+
+export FLASK_APP=app.py
+export FLASK_ENV=development
+export CLOUDINARY_URL=your_cloudinary_url
+
+## Run the Backend Server:
+python app.py
+
+
+## Frontend Setup
+Navigate to the Frontend Directory:
+
+cd client
+
+## Install Frontend Dependencies:
+
+npm install
+
+## Start the Frontend Development Server:
+
+npm start
+
+
+## Contributing to the Project
+We welcome contributions to this project. To contribute, please follow the steps below:
+
+Fork the repository.
+Create a new branch for your feature or bugfix (git checkout -b feature/your-feature).
+Implement your changes.
+Commit your changes with descriptive messages (git commit -m 'Add feature: your-feature').
+Push your branch to your fork (git push origin feature/your-feature).
+Open a pull request to the main repository.
+Licensing Information
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+Contact Information
+For inquiries, feedback, or support, please contact us at support@recipeplatform.com.
