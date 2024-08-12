@@ -50,6 +50,27 @@ Full Stack Development: React (Frontend) & Flask Python (Backend)
 4. Testing Framework: Jest & Minitests
 5. Frontend: ReactJS & Redux Toolkit (State management)
 
+## Directory Structure
+After cloning this template, you’ll notice the following directory structure:
+
+$ tree -L 2
+.
+├── CONTRIBUTING.md
+├── LICENSE.md
+├── Pipfile
+├── README.md
+├── client
+│   ├── README.md
+│   ├── package.json
+│   ├── public
+│   └── src
+└── server
+    ├── app.py
+    ├── config.py
+    ├── models.py
+    └── seed.py
+
+
 
 ## Setup and Installation
 Prerequisites
@@ -93,6 +114,17 @@ npm install
 ## Start the Frontend Development Server:
 
 npm start
+
+
+## Application Usage
+Access the Application:
+
+Backend: http://localhost:5555
+Frontend: http://localhost:3000
+Develop Your Application:
+
+Start building out your API routes in server/app.py and your database models in server/models.py.
+Develop your React components in client/src/.
 
 
 ## Contributing to the Project
