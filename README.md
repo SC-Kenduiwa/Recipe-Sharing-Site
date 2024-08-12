@@ -56,14 +56,19 @@ After cloning this template, you’ll notice the following directory structure:
 $ tree -L 2
 .
 ├── CONTRIBUTING.md
+
 ├── LICENSE.md
+
 ├── Pipfile
+
 ├── README.md
+
 ├── client
 │   ├── README.md
 │   ├── package.json
 │   ├── public
 │   └── src
+
 └── server
     ├── app.py
     ├── config.py
