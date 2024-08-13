@@ -1,131 +1,201 @@
 .recipe-page-container {
-    display: flex;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 20px;
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.filter-section {
+  width: 250px;
+  padding-right: 20px;
+  border-right: 1px solid #ccc;
+}
+
+.filter-section h2 {
+  margin-top: 0;
+}
+
+.filter-section input,
+.filter-section button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+}
+
+.filter-section button {
+  background-color: #ff6347;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+}
+
+.filter-section button:hover {
+  background-color: #040f04;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding-left: 20px;
+}
+
+.recipe-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 70px;
+}
+
+@media (max-width: 1200px) {
+  .recipe-list {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
+}
+
+@media (max-width: 900px) {
+  .recipe-page-container {
+    flex-direction: column;
+  }
+
   .filter-section {
-    width: 250px;
-    padding-right: 20px;
-    border-right: 1px solid #ccc;
-  }
-  
-  .filter-section h2 {
-    margin-top: 0;
-  }
-  
-  .filter-section input,
-  .filter-section button {
     width: 100%;
-    margin-bottom: 10px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 20px;
+    border-right: none;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+  }
+
+  .main-content {
+    padding-left: 0;
+  }
+
+  .recipe-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .recipe-list {
+    grid-template-columns: 1fr;
+  }
+}
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    padding-bottom: 30px;
   }
   
-  .filter-section button {
+  .pagination button {
     background-color: #ff6347;
-    color: white;
     border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 0 10px;
     cursor: pointer;
-    border-radius: 20px;
+    border-radius: 5px;
     transition: background-color 0.3s;
   }
   
-  .filter-section button:hover {
+  .pagination button:hover {
     background-color: #040f04;
   }
   
-  .main-content {
-    flex-grow: 1;
-    padding-left: 20px;
+  .pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
   }
   
-  .recipe-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 70px;
+  .pagination span {
+    font-size: 16px;
+    margin: 0 10px;
   }
   
-  @media (max-width: 1200px) {
-    .recipe-list {
-      grid-template-columns: repeat(2, 1fr);
-    }
+
+  .loading, .error {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 50px;
   }
   
-  @media (max-width: 900px) {
-    .recipe-page-container {
+  .error {
+    color: #ff0000;
+  }
+
+  @media screen and (max-width: 1024px) {
+    .user-profile {
       flex-direction: column;
     }
   
-    .filter-section {
+    .sidebar {
       width: 100%;
-      border-right: none;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 20px;
+      padding: 20px;
+    }
+  
+    .sidebar ul {
+      display: flex;
+      justify-content: space-around;
+    }
+  
+    .sidebar ul li {
+      margin-bottom: 0;
+    }
+  
+    .content {
+      padding: 20px;
+    }
+  }
+  
+  @media screen and (max-width: 768px) {
+    .user-info {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .user-image-container {
+      margin-right: 0;
       margin-bottom: 20px;
     }
   
-    .main-content {
-      padding-left: 0;
-    }
-  
-    .recipe-list {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
-  @media (max-width: 600px) {
-    .recipe-list {
-      grid-template-columns: 1fr;
-    }
-  }
-    
-    .pagination {
-      display: flex;
-      justify-content: center;
+    .button-container {
+      flex-direction: column;
       align-items: center;
-      margin-top: 30px;
-      padding-bottom: 30px;
     }
-    
-    .pagination button {
-      background-color: #FF6600;
-      border: none;
-      color: white;
-      padding: 10px 20px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 0 10px;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
-    
-    .pagination button:hover {
-      background-color: #040f04;
-    }
-    
-    .pagination button:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
-    }
-    
-    .pagination span {
-      font-size: 16px;
-      margin: 0 10px;
-    }
-    
   
-    .loading, .error {
-      text-align: center;
-      font-size: 18px;
-      margin-top: 50px;
+    .update-profile-button {
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 10px;
     }
-    
-    .error {
-      color: #ff0000;
+  }
+  
+  @media screen and (max-width: 480px) {
+    .sidebar ul {
+      flex-direction: column;
     }
+  
+    .sidebar ul li {
+      margin-bottom: 10px;
+    }
+  
+    .user-details h2 {
+      font-size: 1.5em;
+    }
+  
+    .user-details p {
+      font-size: 1em;
+    }
+  
+    .recipes h2, .bookmarks h2 {
+      font-size: 1.5em;
+    }
+  }
