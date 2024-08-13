@@ -1,6 +1,6 @@
 .user-profile {
   display: flex;
-  background-color: #f9f9f9; /* Light background */
+  background-color: #f9f9f9;
   height: auto;
   margin: 0;
 }
@@ -8,9 +8,9 @@
 /* Sidebar styling */
 .sidebar {
   width: 250px;
-  background-color: #e0e6db; /* Light greenish background color */
+  background-color: #f0e9e9;
   padding: 20px;
-  border-right: 1px solid #d3d3d3; /* Subtle border to separate sidebar */
+  border-right: 1px solid #d3d3d3; 
   box-sizing: border-box;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .sidebar ul li {
-  margin-bottom: 20px; /* Increased spacing between sidebar items */
+  margin-bottom: 20px;
   font-size: 1em;
   cursor: pointer;
   padding: 10px;
@@ -37,13 +37,13 @@
 
 .sidebar ul li.active,
 .sidebar ul li:hover {
-  background-color: #d4dec7; /* Darker green for active/hover state */
+  background-color: #ff6347; 
 }
 
 /* Content styling */
 .content {
   flex: 1;
-  padding: 20px 40px; /* Extra padding on the left for spacing */
+  padding: 20px 40px;
   background-color: #fff;
   box-sizing: border-box;
 }
