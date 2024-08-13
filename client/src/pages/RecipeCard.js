@@ -13,7 +13,6 @@ function RecipeCard({ recipes }) {
               <h5 className="card-title">{title}</h5>
               <p className="card-country"><i className="fa fa-globe" aria-hidden="true"></i> {country}</p>
               <p className="card-description">{description}</p>
-              <small>{servings} servings</small>
               <small><i className="fa fa-clock-o" aria-hidden="true"></i> {cooking_time} mins</small>
             </div>
           </div>
