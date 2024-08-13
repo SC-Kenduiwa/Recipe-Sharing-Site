@@ -145,4 +145,13 @@ Licensing Information
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
 Contact Information
-For inquiries, feedback, or support, please contact us at support@recipeplatform.com..
+For inquiries, feedback, or support, please contact us at support@recipeplatform.com.
+
+
+
+## CONTRIBUTES
+1. Shanice Kenduiwa
+2. Justin Mwangi
+3. Bridget Muchesia
+4. Emmanuel Otieno
+5. Abdishakur Aden
