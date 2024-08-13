@@ -145,4 +145,4 @@ Licensing Information
 This project is licensed under the MIT License. See the LICENSE file for more details.
 
 Contact Information
-For inquiries, feedback, or support, please contact us at support@recipeplatform.com.
+For inquiries, feedback, or support, please contact us at support@recipeplatform.com..
