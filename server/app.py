@@ -95,7 +95,7 @@ class RecipeResource(Resource):
             servings = request.args.get('servings', type=int)
             createdDateTime = request.args.get('createdDateTime')
             page = request.args.get('page', default=1, type=int)
-            per_page = request.args.get('per_page', default=10, type=int)
+            per_page = request.args.get('per_page', default=12, type=int)
             
             # Base query
             query = Recipe.query
@@ -337,6 +337,7 @@ class UserProfile(Resource):
     def format_recipe(self, recipe):
         return {
             'id': recipe.id,
+            'recipe_image_url': recipe.recipe_image_url,
             'title': recipe.title,
             'description': recipe.description,
             'cooking_time': recipe.cooking_time,

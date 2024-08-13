@@ -1,7 +1,4 @@
-.home {
-  padding: 20px;
-}
-
+/* Hero.css */
 .hero {
   display: flex;
   justify-content: space-between;
@@ -35,9 +32,17 @@
   border-radius: 5px;
 }
 
+.hero-images {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end; /* Align images to the right */
+  align-items: center; /* Align images vertically */
+}
+
 .hero-images img {
-  width: 200px;
-  height: 200px;
-  margin: 0 10px;
+  width: 200px; /* Fixed width */
+  height: 200px; /* Fixed height */
+  object-fit: cover; /* Ensure the images maintain aspect ratio and cover the area */
+  margin-left: 10px; /* Space between images */
   border-radius: 10px;
 }

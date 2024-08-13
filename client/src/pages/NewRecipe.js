@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef  } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import CircularProgress from '@mui/material/CircularProgress';
+import { FaArrowLeft } from 'react-icons/fa';
 import './NewRecipe.css';
 
 const NewRecipe = () => {
@@ -18,6 +20,8 @@ const NewRecipe = () => {
   const [image, setImage] = useState(null);
   const [imageLabel, setImageLabel] = useState('Add a photo');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const cancelTokenRef = useRef(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -52,11 +56,15 @@ const NewRecipe = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setLoading(true);
 
     let recipeImageUrl = null;
     if (image) {
       recipeImageUrl = await handleImageUpload(image);
-      if (!recipeImageUrl) return;
+      if (!recipeImageUrl) {
+        setLoading(false);
+        return;
+      }
     }
 
     const recipeData = {
@@ -83,11 +91,24 @@ const NewRecipe = () => {
     } catch (err) {
       console.error('Recipe creation failed:', err);
       setError(err.response?.data?.error || 'Failed to create recipe');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleCancel = () => {
+    if (cancelTokenRef.current) {
+      cancelTokenRef.current.cancel('Operation cancelled by the user');
+    }
+    setLoading(false);
+    setError('');
   };
 
   return (
     <div className="super-obnoxious-recipe-container">
+      <button onClick={() => navigate(-1)} className="back-button">
+        <FaArrowLeft /> Back
+      </button>
       <h2 className="super-obnoxious-title">Add a Recipe</h2>
       <form className="super-obnoxious-form" onSubmit={handleSubmit}>
         <div className="super-obnoxious-photo-upload">
@@ -212,12 +233,12 @@ const NewRecipe = () => {
           <button
             type="button"
             className="super-obnoxious-cancel-button"
-            onClick={() => navigate('/recipes')}
+            onClick={handleCancel}
           >
             Cancel
           </button>
-          <button type="submit" className="super-obnoxious-submit-button">
-            Create Recipe
+          <button type="submit" className="super-obnoxious-submit-button" disabled={loading}>
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Create Recipe'}
           </button>
         </div>
       </form>
