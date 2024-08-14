@@ -1,157 +1,134 @@
-# RECIPE-SHARING-SITE 
+# RecipeConnect
 
-# Table of Contents
+## Project Overview
 
-1. Introduction
-2. Problem Statement
-3. Solution
-4. Future Considerations
-5. Team
-6. Minimum Viable Product (MVP)
-7. Technical Expectations
-8. Setup and Installation
-9. Usage
-10. Testing
-11. Contributing
-12. License
-13. Contact
+RecipeConnect is a web application that allows users to find and share simple, accessible recipes. It caters to middle-class and lower-class homes/restaurants, providing an easy-to-use platform for discovering and sharing culinary ideas.
 
- # Introduction
-Finding the right recipe online can be a hassle, especially when most available recipes are for high-end meals that may not be feasible in a middle-class to lower-class home or restaurant. Our application aims to solve this problem by providing a platform where users can find and share simple recipes.
+## Table of Contents
 
- # Problem Statement
-Most online recipe platforms focus on high-end meals, making it difficult for users from middle-class or lower-class backgrounds to find feasible recipes. This creates a need for an application that offers simple and accessible recipes.
+- [Key Features](#key-features)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Setup Instructions](#setup-instructions)
+  - [Cloning the Repository](#cloning-the-repository)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+- [Future Enhancements](#future-enhancements)
+- [Contributors](#contributors)
 
- # Solution
-Our application allows users to find and share simple recipes online. Each recipe includes ingredients, procedures, and the number of people served. Registered users can also comment, bookmark, and rate recipes.
+### Key Features
 
- # Future Considerations
-Convert the application into an Android app.
-Allow users to follow each other and receive notifications when users they follow post new recipes.
+- User authentication (login/signup)
+- Profile management
+- Recipe browsing and searching
+- Recipe filtering
+- CRUD operations for recipes
+- Recipe bookmarking
+- Social media sharing
+- Responsive design for mobile compatibility
 
- # Team
-Full Stack Development: React (Frontend) & Flask Python (Backend)
+## Tech Stack
 
- # Minimum Viable Product (MVP)
-1. Login
-2. Create an account
-3. View and update profile (profile images saved on Cloudinary)
-4. View and search recipes (by name, ingredients, and number of people served)
-5. Filter recipes by country, ratings, ingredients, number of people served, and create date and time
-6. Create, update, and delete recipes
-7. Bookmark/favorite recipes
-8. Share recipes on social media (Facebook, Twitter, and WhatsApp)
-9. Sign out
+- Frontend: React, Redux Toolkit
+- Backend: Flask (Python)
+- Database: SQLAlchemy
+- Testing: Jest (Frontend), Minitests (Backend)
+- Dependency Management: pipenv (Python), npm (JavaScript)
+- Image Storage: Cloudinary
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+- Python (3.7+)
+- Node.js (14+)
+- pip
+- pipenv
+- Git
+
+## Setup Instructions
+
+### Cloning the Repository
+
+1. Open your terminal and run:
+```
+git clone git@github.com:SC-Kenduiwa/Recipe-Sharing-Site.git
+```
+
+### Backend Setup
+
+1. Navigate to the backend directory:
+```
+cd server
+```
+2. Install Python dependencies using pipenv:
+```
+pipenv install
+```
+3. Activate the virtual environment:
+```
+pipenv shell
+```
+4. Set up environment variables:
+- Create a `.env` file in the backend directory
+- Add necessary environment variables (e.g., DATABASE_URL, SECRET_KEY, CLOUDINARY_URL)
+
+5. Seed the database:
+   ```
+   python seed.py
+   ```
+6. Run the Flask development server:
+   ```
+   python app.py
+   ```
+
+### Frontend Setup
+
+1. Open a new terminal and navigate to the frontend directory:
+   ```
+   cd client
+   ```
+2. Install JavaScript dependencies:
+   ```
+   npm  install
+   ```
+3. Start the React development server:
+   ```
+   npm start
+   ```
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT) 
+
+## Acknowledgments
+
+- Cloudinary for image storage solutions
+- React and Redux communities for excellent documentation
+- Flask and SQLAlchemy for robust backend support
+
+## Future Enhancements
+
+- Android application development
+- User following feature with notifications
+- Enhanced recipe recommendation system
+
+## Contributors
+- [Shanice Kenduiwa](https://github.com/SC-Kenduiwa)
+- [Justin Mwangi](https://github.com/14justin)
+- [Bridget Muchesia](https://github.com/VenusBridget)
+- [Emmanuel Otieno](https://github.com/0097eo)
+- [Abdishakur Aden](https://github.com/Abdishakur-aden)
+
+For any additional information or queries, please open an issue in the GitHub repository.
    
- # Technical Expectations
-1. Backend: Flask Python
-2. Database: SQLAlchemy
-3. Wireframes: Figma (Mobile-friendly)
-4. Testing Framework: Jest & Minitests
-5. Frontend: ReactJS & Redux Toolkit (State management)
 
-## Directory Structure
-After cloning this template, you’ll notice the following directory structure:
-
-$ tree -L 2
-.
-├── CONTRIBUTING.md
-
-├── LICENSE.md
-
-├── Pipfile
-
-├── README.md
-
-├── client
-│   ├── README.md
-│   ├── package.json
-│   ├── public
-│   └── src
-
-└── server
-    ├── app.py
-    ├── config.py
-    ├── models.py
-    └── seed.py
-
-
-
-## Setup and Installation
-Prerequisites
-Ensure that the following software is installed on your system:
-
-1.Node.js (with npm)
-2.Python
-3.Flask
-4.SQLAlchemy
-5.A Cloudinary account (for managing profile images)
-
-## Backend Setup
-Clone the Repository:
-git clone https://github.com/yourusername/recipe-sharing-platform.git
-cd recipe-sharing-platform/server
-
-## Create and Activate a Virtual Environment:
-python -m venv venv
-source venv/bin/activate 
-
-## Configure Environment Variables:
-Set up environment variables required by Flask and Cloudinary.
-
-export FLASK_APP=app.py
-export FLASK_ENV=development
-export CLOUDINARY_URL=your_cloudinary_url
-
-## Run the Backend Server:
-python app.py
-
-
-## Frontend Setup
-Navigate to the Frontend Directory:
-
-cd client
-
-## Install Frontend Dependencies:
-
-npm install
-
-## Start the Frontend Development Server:
-
-npm start
-
-
-## Application Usage
-Access the Application:
-
-Backend: http://localhost:5555
-Frontend: http://localhost:3000
-Develop Your Application:
-
-Start building out your API routes in server/app.py and your database models in server/models.py.
-Develop your React components in client/src/.
-
-
-## Contributing to the Project
-We welcome contributions to this project. To contribute, please follow the steps below:
-
-Fork the repository.
-Create a new branch for your feature or bugfix (git checkout -b feature/your-feature).
-Implement your changes.
-Commit your changes with descriptive messages (git commit -m 'Add feature: your-feature').
-Push your branch to your fork (git push origin feature/your-feature).
-Open a pull request to the main repository.
-Licensing Information
-This project is licensed under the MIT License. See the LICENSE file for more details.
-
-Contact Information
-For inquiries, feedback, or support, please contact us at support@recipeplatform.com.
-
-
-
-## CONTRIBUTES
-1. Shanice Kenduiwa
-2. Justin Mwangi
-3. Bridget Muchesia
-4. Emmanuel Otieno
-5. Abdishakur Aden
