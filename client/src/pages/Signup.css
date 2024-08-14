@@ -28,17 +28,18 @@
     color: white;
     text-align: center;
     padding: 20px;
-    
     border-radius: 10px;
 }
 
 .image-text h1 {
     font-size: 32px;
     margin-bottom: 10px;
+    color: white;
 }
 
 .image-text p {
     font-size: 18px;
+    color: white;
 }
 
 .login-section {
@@ -70,12 +71,13 @@
     border-radius: 20px;
     font-size: 16px;
 }
+
 .signup-button {
     position: relative;
-    min-height: 36px; /* Adjust as needed */
+    min-height: 36px;
 }
 
-.current-image{
+.current-image {
     text-align: center;
     margin-bottom: 20px;
 }
@@ -105,4 +107,50 @@
 .error-message {
     color: red;
     margin-top: 10px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .login-container {
+        flex-direction: column;
+    }
+
+    .image-section {
+        height: 30vh;
+    }
+
+    .login-section {
+        padding: 10px;
+    }
+
+    .login-form {
+        max-width: 100%;
+    }
+
+    .image-text h1 {
+        font-size: 24px;
+    }
+
+    .image-text p {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .login-form h2 {
+        font-size: 20px;
+    }
+
+    .login-form input,
+    .login-form button {
+        font-size: 14px;
+    }
+
+    .image-text h1 {
+        font-size: 20px;
+    }
+
+    .image-text p {
+        font-size: 12px;
+    }
 }

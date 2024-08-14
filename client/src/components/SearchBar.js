@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './SearchBar.css';
 
-const SearchBar = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const SearchBar = ({ onSearch, initialSearchTerm = '' }) => {
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
 
   const handleSearch = () => {
     onSearch(searchTerm);
@@ -17,7 +17,6 @@ const SearchBar = ({ onSearch }) => {
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
       />
-      
     </div>
   );
 };

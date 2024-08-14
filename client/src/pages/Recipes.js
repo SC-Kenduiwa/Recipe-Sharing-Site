@@ -16,7 +16,6 @@ const RecipeList = () => {
   
   const [filterInputs, setFilterInputs] = useState({
     country: '',
-    rating: '',
     ingredients: '',
     servings: '',
     createdDateTime: '',
@@ -24,7 +23,6 @@ const RecipeList = () => {
 
   const [appliedFilters, setAppliedFilters] = useState({
     country: '',
-    rating: '',
     ingredients: '',
     servings: '',
     createdDateTime: '',
@@ -80,12 +78,10 @@ const RecipeList = () => {
   };
 
   const handleApplyFilters = () => {
-    // Convert rating and servings to numbers before applying
-    const appliedRating = filterInputs.rating ? parseFloat(filterInputs.rating) : '';
+    // Convert servings to number before applying
     const appliedServings = filterInputs.servings ? parseInt(filterInputs.servings) : '';
     setAppliedFilters({
       ...filterInputs,
-      rating: appliedRating,
       servings: appliedServings
     });
     setCurrentPage(1);
@@ -118,16 +114,6 @@ const RecipeList = () => {
           onChange={handleFilterInputChange}
         />
         <input
-          type="number"
-          name="rating"
-          placeholder="Minimum Rating"
-          value={filterInputs.rating}
-          onChange={handleFilterInputChange}
-          min="1"
-          max="5"
-          step="0.1"
-        />
-        <input
           type="text"
           name="ingredients"
           placeholder="Ingredients"
@@ -151,9 +137,9 @@ const RecipeList = () => {
         <button onClick={handleApplyFilters} className='filter-button'>Apply Filters</button>
       </div>
       <div className="main-content">
-        <div className='search-container'>
-        <SearchBar onSearch={handleSearch} />
-        </div>
+
+        <SearchBar onSearch={handleSearch} initialSearchTerm={searchTerm}/>
+
         <div className="recipe-list">
           {recipes.map((recipe) => (
             <RecipeCardd
@@ -168,11 +154,11 @@ const RecipeList = () => {
         </div>
         <div className="pagination">
           <button onClick={handlePrevPage} disabled={currentPage === 1}>
-          <FaArrowLeft />
+            <FaArrowLeft />
           </button>
           <span>{`Page ${currentPage} of ${totalPages}`}</span>
           <button onClick={handleNextPage} disabled={currentPage === totalPages}>
-         <FaArrowRight />
+            <FaArrowRight />
           </button>
         </div>
       </div>
