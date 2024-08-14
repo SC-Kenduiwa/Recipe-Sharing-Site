@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import RecipeCard from './RecipeCard';
+import Card from './Card';
 import './Profile.css';
 
 function UserProfile() {
   const [userData, setUserData] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [bookmarks, setBookmarks] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('profile');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (!token) {
       navigate('/login');
-    }else{
-      setIsLoggedIn(true);
+    } else {
       fetchUserProfile(token);
     }
-  }, []);
- 
+  }, [navigate]);
+
   const fetchUserProfile = async (token) => {
     try {
+      setIsLoading(true);
       const response = await axios.get('/profile', {
         headers: {'Authorization': `Bearer ${token}`}
       });
@@ -31,67 +35,79 @@ function UserProfile() {
       setBookmarks(bookmarks);
     } catch (error) {
       console.error('Error fetching user profile:', error);
+      setError('Failed to load user profile. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  if (!isLoggedIn) return <div>Please log in to view your profile</div>;
-  if (!userData) return <div>Data-Fetching failed</div>;
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'profile':
+        return (
+          <div className="profile-section">
+            <div className="user-info">
+              <div className="user-image-container">
+                <img src={userData.profile_image_url} alt="Profile" className="user-image" />
+              </div>
+              <div className="user-details">
+                <h2>Welcome, {userData.username}</h2>
+                <p><strong>Email:</strong> {userData.email}</p>
+                <div className="button-container">
+                  <Link to="/editprofile" className="update-profile-button">
+                    <i className="fas fa-user-edit"></i>
+                    <span>Edit Profile</span>
+                  </Link>
+                  <Link to="/newrecipe" className="update-profile-button">
+                    <i className="fas fa-plus-circle"></i>
+                    <span>Add New Recipe</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        case 'recipes':
+          return (
+            <div className={`recipes ${recipes.length === 0 ? 'recipes-empty' : ''}`}>
+              <h2>My Recipes</h2>
+              {recipes.length > 0 ? <Card recipes={recipes} /> : <p>No recipes added yet.</p>}
+            </div>
+          );
+        case 'bookmarks':
+          return (
+            <div className={`bookmarks ${bookmarks.length === 0 ? 'bookmarks-empty' : ''}`}>
+              <h2>My Bookmarks</h2>
+              {bookmarks.length > 0 ? <RecipeCard recipes={bookmarks} /> : <p>No bookmarks added yet.</p>}
+            </div>
+          );
+      default:
+        return null;
+    }
+  };
+
+  if (isLoading) return <div className="loading">Loading profile...</div>;
+  if (error) return <div className="error">{error}</div>;
+  if (!userData) return <div className="error">No user data available</div>;
 
   return (
     <div className="user-profile">
-
-      <div className="user-profile-container">
-        <h1>User Profile</h1>
-        <div className="user-info">
-          <div className="user-image-container">
-            <img src={userData.profile_image_url} alt="Profile" className="user-image" />
-          </div>
-          <div className="user-details">
-            <p><strong>Username:</strong> {userData.username}</p>
-            <p><strong>Email:</strong> {userData.email}</p>
-            <div className="update-button-container">        
-              <button className="update-profile-button">
-                <Link to="/editprofile">EditProfile</Link>
-              </button>
-            </div>
-          </div>
-        </div>
+      <div className="sidebar">
+        <h3>Manage Your Account</h3>
+        <ul>
+          <li className={activeTab === 'profile' ? 'active' : ''} onClick={() => setActiveTab('profile')}>
+            <i className="fas fa-user"></i> Profile
+          </li>
+          <li className={activeTab === 'recipes' ? 'active' : ''} onClick={() => setActiveTab('recipes')}>
+            <i className="fas fa-utensils"></i> My Recipes
+          </li>
+          <li className={activeTab === 'bookmarks' ? 'active' : ''} onClick={() => setActiveTab('bookmarks')}>
+            <i className="fas fa-bookmark"></i> Bookmarks
+          </li>
+        </ul>
       </div>
-
-      <div className="recipes">
-        <h2>My Recipes</h2>
-        {recipes.map(recipe => (
-          <div key={recipe.id} className="recipe-item">
-            <div className="recipe-image-container">
-              <img src={recipe.recipe_image_url} alt={recipe.title} className="recipe-image" />
-            </div>
-            <div className="recipe-details">
-              <h3>{recipe.title}</h3>
-              <p>{recipe.description}</p>
-              <p><strong>Cooking Time:</strong> {recipe.cooking_time} minutes</p>
-              <p><strong>Difficulty:</strong> {recipe.difficulty_level}</p>
-              <p><strong>Country:</strong> {recipe.country}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="bookmarks">
-        <h2>Bookmarks</h2>
-        {bookmarks.map(bookmark => (
-          <div key={bookmark.id} className="bookmark-item">
-            <div className="recipe-image-container">
-              <img src={bookmark.recipe_image_url} alt={bookmark.title} className="recipe-image" />
-            </div>
-            <div className="recipe-details">
-              <h3>{bookmark.title}</h3>
-              <p>{bookmark.description}</p>
-              <p><strong>Cooking Time:</strong> {bookmark.cooking_time} minutes</p>
-              <p><strong>Difficulty:</strong> {bookmark.difficulty_level}</p>
-              <p><strong>Country:</strong> {bookmark.country}</p>
-            </div>
-          </div>
-        ))}
+      <div className="content">
+        {renderContent()}
       </div>
     </div>
   );

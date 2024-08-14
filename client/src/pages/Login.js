@@ -1,13 +1,16 @@
+// Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import './Login.css';
+import { useAuth } from '../components/AuthContext';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,6 +22,7 @@ const Login = () => {
       localStorage.setItem('access_token', access_token);
       localStorage.setItem('refresh_token', refresh_token);
       setupTokenRefresh(refresh_token);
+      setIsLoggedIn(true);
       navigate('/recipes');
     } catch (err) {
       console.error('Login failed:', err);
@@ -39,7 +43,7 @@ const Login = () => {
           <form onSubmit={handleLogin}>
             <input
               type="text"
-              placeholder="Email address"
+              placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required

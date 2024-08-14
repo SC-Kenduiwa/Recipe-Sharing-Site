@@ -1,113 +1,169 @@
-import React, { useEffect, useState, useCallback } from 'react'
-import recipepage1 from '../assets/recipepage1.jpg';
-import RecipeCard from './RecipeCard'
-import SearchRecipe from './SearchRecipe'
-import Filter from './Filter'
-import './Recipes.css'
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import RecipeCardd from './RecipeCardd'
+import SearchBar from '../components/SearchBar';
+import './Recipes.css';
+import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 
-function Recipes() {
+const RecipeList = () => {
+  const navigate = useNavigate();
   const [recipes, setRecipes] = useState([]);
-  const [search, setSearch] = useState('');
-  const [showFilter, setShowFilter] = useState(false);
-  const [filters, setFilters] = useState({
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  const [filterInputs, setFilterInputs] = useState({
     country: '',
     ingredients: '',
-    createdDateTime: ''
-  });
-  const [pagination, setPagination] = useState({
-    page: 1,
-    perPage: 10,
-    totalPages: 1,
+    servings: '',
+    createdDateTime: '',
   });
 
-  const fetchRecipes = useCallback(() => {
-    const params = new URLSearchParams({
-      search: search,
-      country: filters.country,
-      ingredients: filters.ingredients,
-      createdDateTime: filters.createdDateTime,
-      page: pagination.page,
-      perPage: pagination.perPage,
-    })
-
-    fetch(`http://127.0.0.1:5555/recipes?${params.toString()}`)
-      .then(response => response.json())
-      .then(data => {
-        setRecipes(data.recipes)
-        setPagination(prev => ({
-          ...prev,
-          totalPages: data.total_pages
-        }))
-      })
-  }, [search, filters, pagination.page, pagination.perPage]);
+  const [appliedFilters, setAppliedFilters] = useState({
+    country: '',
+    ingredients: '',
+    servings: '',
+    createdDateTime: '',
+  });
 
   useEffect(() => {
-    fetchRecipes();
-  }, [fetchRecipes]);
+    fetchRecipes(currentPage, searchTerm, appliedFilters);
+  }, [currentPage, searchTerm, appliedFilters]);
 
-  const handleSearchChange = (searchInput) => {
-    setSearch(searchInput)
-    setPagination(prev => ({ ...prev, page: 1 }));
+  const fetchRecipes = async (page, search, filters) => {
+    try {
+      setLoading(true);
+      const queryParams = new URLSearchParams({
+        page: page,
+        per_page: 12,
+        search: search,
+        ...filters
+      });
+
+      // Remove empty parameters
+      for (let [key, value] of queryParams.entries()) {
+        if (value === '') {
+          queryParams.delete(key);
+        }
+      }
+
+      const response = await fetch(`/recipes?${queryParams.toString()}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch recipes');
+      }
+      const data = await response.json();
+      if (data.recipes.length === 0) {
+        navigate('/notfound');
+      } else {
+        setRecipes(data.recipes);
+        setTotalPages(data.total_pages);
+      }
+      setLoading(false);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
+    }
   };
 
-  const handleFilterToggle = () => {
-    setShowFilter(prevState => !prevState);
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+    setCurrentPage(1);
   };
 
-  const handleFilterApply = (filterValues) => {
-    setFilters(filterValues);
-    setPagination(prev => ({ ...prev, page: 1 }));
-    setShowFilter(false);
+  const handleFilterInputChange = (e) => {
+    const { name, value } = e.target;
+    setFilterInputs(prev => ({ ...prev, [name]: value }));
   };
 
-  const handlePageChange = (page) => {
-    setPagination(prev => ({ ...prev, page }));
+  const handleApplyFilters = () => {
+    // Convert servings to number before applying
+    const appliedServings = filterInputs.servings ? parseInt(filterInputs.servings) : '';
+    setAppliedFilters({
+      ...filterInputs,
+      servings: appliedServings
+    });
+    setCurrentPage(1);
   };
 
-  const filteredAndSearchedRecipes = recipes.filter(recipe => {
-    const matchesCountry = filters.country === '' || recipe.country.toLowerCase().includes(filters.country.toLowerCase());
-    const matchesIngredients = filters.ingredients === '' || recipe.ingredients.toLowerCase().includes(filters.ingredients.toLowerCase());
-    const matchesDate = filters.createdDateTime === '' || recipe.createdDateTime === filters.createdDateTime;
+  const handlePrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-    const matchesSearch = recipe.title.toLowerCase().includes(search.toLowerCase()) ||
-      recipe.ingredients.toLowerCase().includes(search.toLowerCase());
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
-    return matchesCountry && matchesIngredients && matchesDate && matchesSearch;
-  });
+  if (loading) return <div className="loading">Loading...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
 
   return (
-    <div className='recipe-container'>
-      <div className='image-container'>
-        <img src={recipepage1} alt='recipepage' className='recipe-image' />
-        <h2 className='heading'>Fuel your body & soul - find <span className="recipe-highlight">RECIPES </span>that taste <span className="recipe-highlight">AMAZING!</span>
-        </h2>
-        <SearchRecipe search={search} onSearchChange={handleSearchChange} />
+    <div className="recipe-page-container">
+      <div className="filter-section">
+        <h2>Categories</h2>
+        <input
+          type="text"
+          name="country"
+          placeholder="Country"
+          value={filterInputs.country}
+          onChange={handleFilterInputChange}
+        />
+        <input
+          type="text"
+          name="ingredients"
+          placeholder="Ingredients"
+          value={filterInputs.ingredients}
+          onChange={handleFilterInputChange}
+        />
+        <input
+          type="number"
+          name="servings"
+          placeholder="Servings"
+          value={filterInputs.servings}
+          onChange={handleFilterInputChange}
+          min="1"
+        />
+        <input
+          type="date"
+          name="createdDateTime"
+          value={filterInputs.createdDateTime}
+          onChange={handleFilterInputChange}
+        />
+        <button onClick={handleApplyFilters} className='filter-button'>Apply Filters</button>
       </div>
-      <button className='filter-button' onClick={handleFilterToggle}>
-        <i className="fa fa-filter" aria-hidden="true"></i>
-        {showFilter ? 'Hide Filters' : 'Show Filters'}
-      </button>
-      {showFilter && <Filter onFilter={handleFilterApply} />}
-      {filteredAndSearchedRecipes.length > 0 ? (
-        <>
-          <RecipeCard recipes={filteredAndSearchedRecipes} />
-          <div className="pagination-control">
-            <button className="pagination-button" onClick={() => handlePageChange(pagination.page - 1)}
-              disabled={pagination.page === 1}>
-              Previous
-            </button>
-            <span className='pagination-info'>Page {pagination.page} of {pagination.totalPages}</span>
-            <button className="pagination-button" onClick={() => handlePageChange(pagination.page + 1)}
-              disabled={pagination.page === pagination.totalPages}>
-              Next
-            </button>
-          </div>
-        </>
-      ) : (
-        <p className='no-results-message'>No recipes found matching your criteria.</p>
-      )}
+      <div className="main-content">
+
+        <SearchBar onSearch={handleSearch} initialSearchTerm={searchTerm}/>
+
+        <div className="recipe-list">
+          {recipes.map((recipe) => (
+            <RecipeCardd
+              key={recipe.id}
+              id={recipe.id}
+              image={recipe.recipe_image_url}
+              title={recipe.title}
+              description={recipe.description}
+              averageRating={recipe.average_rating}
+            />
+          ))}
+        </div>
+        <div className="pagination">
+          <button onClick={handlePrevPage} disabled={currentPage === 1}>
+            <FaArrowLeft />
+          </button>
+          <span>{`Page ${currentPage} of ${totalPages}`}</span>
+          <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+            <FaArrowRight />
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Recipes;
+export default RecipeList;

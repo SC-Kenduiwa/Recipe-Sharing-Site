@@ -9,7 +9,198 @@
     padding-left: 20px;
     padding-right: 20px;
   }
+  .super-obnoxious-recipe-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    position: relative;
+    padding-top: 60px; 
+  }
   
+  .super-obnoxious-title {
+    text-align: center;
+    font-size: 24px;
+    margin-top: 0%;
+    margin-bottom: 20px;
+  }
+  
+  .super-obnoxious-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .super-obnoxious-photo-upload {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border: 2px dashed #FF7F00;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .super-obnoxious-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .super-obnoxious-photo-upload input[type="file"] {
+    display: none;
+  }
+  
+  .super-obnoxious-form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .super-obnoxious-label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+  }
+  
+  .super-obnoxious-input,
+  .super-obnoxious-textarea,
+  .super-obnoxious-select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .super-obnoxious-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+  
+  .super-obnoxious-form-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  
+  .super-obnoxious-half-width {
+    width: calc(50% - 10px);
+  }
+  
+  .super-obnoxious-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .super-obnoxious-submit-button,
+  .super-obnoxious-cancel-button {
+    background-color: #ff6347;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    min-width: 120px;
+    min-height: 40px;
+  }
+  
+  .super-obnoxious-cancel-button {
+    background-color: #ccc;
+    color: #333;
+  }
+  
+  .super-obnoxious-submit-button:hover {
+    background-color: #e5533d;
+  }
+  
+  .super-obnoxious-submit-button:disabled,
+  .super-obnoxious-cancel-button:disabled {
+    background-color: #ccc;
+    color: #999;
+    cursor: not-allowed;
+  }
+  
+  .super-obnoxious-submit-button .MuiCircularProgress-root {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -12px;
+    margin-left: -12px;
+  }
+  
+  .super-obnoxious-error-message {
+    color: red;
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  @media (max-width: 768px) {
+    .super-obnoxious-recipe-container {
+        padding: 15px;
+    }
+  
+    .super-obnoxious-title {
+        font-size: 20px;
+    }
+  
+    .super-obnoxious-form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+  
+    .super-obnoxious-half-width {
+        width: 100%;
+    }
+  
+    .super-obnoxious-form-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+  
+    .super-obnoxious-submit-button,
+    .super-obnoxious-cancel-button {
+        width: 100%;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .super-obnoxious-recipe-container {
+        padding: 10px;
+    }
+  
+    .super-obnoxious-title {
+        font-size: 18px;
+    }
+  
+    .super-obnoxious-label {
+        font-size: 12px;
+    }
+  
+    .super-obnoxious-input,
+    .super-obnoxious-textarea,
+    .super-obnoxious-select {
+        font-size: 12px;
+    }
+  
+    .super-obnoxious-submit-button,
+    .super-obnoxious-cancel-button {
+        font-size: 14px;
+    }
+  }
   .super-obnoxious-title {
     text-align: center;
     font-size: 24px;
@@ -124,4 +315,44 @@
     font-weight: bold;
     text-align: center;
   }
+  .delete-confirmation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
   
+  .delete-confirmation-modal {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    text-align: center;
+  }
+  
+  .delete-confirmation-actions {
+    margin-top: 20px;
+  }
+  
+  .confirm-delete-btn, .cancel-delete-btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .confirm-delete-btn {
+    background-color: #ff4136;
+    color: white;
+  }
+  
+  .cancel-delete-btn {
+    background-color: #aaa;
+    color: white;
+  }

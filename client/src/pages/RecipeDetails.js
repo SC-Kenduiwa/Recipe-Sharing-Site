@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { FaShare, FaBookmark, FaStar, FaFacebookF, FaTwitter, FaEnvelope, FaLink, FaWhatsapp } from 'react-icons/fa';
+import { FaShare, FaBookmark, FaStar, FaChartLine, FaUtensils, FaArrowLeft, FaFacebookF, FaTwitter, FaEnvelope, FaLink, FaWhatsapp, FaClock, FaGlobe  } from 'react-icons/fa';
 import './RecipeDetails.css';
 
 const ShareButton = ({ recipe }) => {
@@ -169,7 +169,10 @@ const RecipeDetails = () => {
   const procedureList = ensureArray(recipe.procedure);
 
   return (
-    <div className="recipe-details">
+    <div className="recipe-detailss">
+      <button onClick={() => navigate(-1)} className="back-button">
+        <FaArrowLeft /> Back
+      </button>
       <h1>{recipe.title}</h1>
       <div className="recipe-rating">
         {[1, 2, 3, 4, 5].map((star) => (
@@ -195,10 +198,12 @@ const RecipeDetails = () => {
       <h2>Overview</h2>
       <p className="recipe-description">{recipe.description}</p>
 
-      <div className="recipe-info">
-        <p>Servings: {recipe.servings}</p>
-        <p>Cook Time: {recipe.cooking_time} Minutes</p>
-        <p>Difficulty: {recipe.difficulty_level}</p>
+      <div className="recipe-infoo">
+        <p>Servings: <FaUtensils /> {recipe.servings}</p>
+        <p>Cook Time: <FaClock /> {recipe.cooking_time} Minutes</p>
+        <p>Difficulty: <FaChartLine /> {recipe.difficulty_level}</p>
+        <p>Country: <FaGlobe /> {recipe.country}</p>
+        
       </div>
 
       <div className="recipe-content">
