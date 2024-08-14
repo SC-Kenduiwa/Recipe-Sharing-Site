@@ -137,7 +137,9 @@ const RecipeList = () => {
         <button onClick={handleApplyFilters} className='filter-button'>Apply Filters</button>
       </div>
       <div className="main-content">
+
         <SearchBar onSearch={handleSearch} initialSearchTerm={searchTerm}/>
+
         <div className="recipe-list">
           {recipes.map((recipe) => (
             <RecipeCardd

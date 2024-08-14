@@ -1,14 +1,18 @@
 .user-profile {
   display: flex;
   background-color: #f9f9f9;
+
   min-height: 90vh;
+
 }
 
 .sidebar {
   width: 250px;
+
   background-color: #3c3c3c;
   padding: 30px 20px;
   color: #fff;
+
 }
 
 .sidebar h3 {
@@ -24,8 +28,10 @@
 }
 
 .sidebar ul li {
+
   margin-bottom: 15px;
   font-size: 1.1em;
+
   cursor: pointer;
   padding: 12px 15px;
   border-radius: 8px;
@@ -42,12 +48,16 @@
 
 .sidebar ul li.active,
 .sidebar ul li:hover {
+
   background-color: #555;
+
 }
 
 .content {
   flex: 1;
+
   padding: 40px;
+
   background-color: #fff;
 }
 
